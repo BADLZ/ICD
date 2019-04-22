@@ -1,7 +1,7 @@
 package Client.Aluno;
-
 import java.io.*;
 import java.net.*;
+
 import xml.xmlUtil;
 
 public class ClienteAluno extends Thread {
@@ -15,7 +15,7 @@ public class ClienteAluno extends Thread {
 	public ClienteAluno() {
 		this.start();
 		try {
-			s = new Socket(host, port);				
+			s = new Socket(InetAddress.getLocalHost(), port);				
 			is = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			os = new PrintWriter(s.getOutputStream(), true);
 		} catch (Exception e) {
@@ -52,10 +52,18 @@ public class ClienteAluno extends Thread {
 				Registar(nome, data, numero);
 				break;
 			case '0':
+				os.println("0");
+				try {Thread.sleep(100);}
+				catch (InterruptedException e) {e.printStackTrace();}
 				break;
 			default:
 				System.out.println("Opção inválida. Tente outra vez.");
 			}
+			
+			try {
+				System.out.println("Servidor > " + is.readLine());
+			} catch (IOException e) {e.printStackTrace();}
+			
 		} while (op != '0');
 		System.out.println("Terminou a execução.");
 	}
@@ -108,7 +116,7 @@ public class ClienteAluno extends Thread {
 			if (xmlUtil.verificarResponse(inputline, "Accept.xsd")) {
 				msg = nome + " " + dataNascimento + " " + String.valueOf(numero);
 				os.println(msg);
-			}else {
+			} else {
 				System.out.println("Servidor negou o Registo");
 			}
 

@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import Client.Aluno.ClienteAluno;
 import xml.xmlUtil;
 
 
@@ -16,6 +15,9 @@ public class HandleConnectionThread extends Thread {
     
     private BufferedReader is = null;
     private PrintWriter os = null;
+    
+    @SuppressWarnings("unused")
+	private boolean isOn = true;
 
     public HandleConnectionThread (Socket connection) {
         this.connection = connection;
@@ -36,6 +38,12 @@ public class HandleConnectionThread extends Thread {
 	         for (;;) {
 	        	inputLine = is.readLine();
 	        	
+	        	if (inputLine.equals("0")) {
+	        		System.out.println("Thread " + this.getId() + " disconectou-se");
+	        		isOn = false;
+	        		break;
+	        	}
+	        	
 	        	if (inputLine == null || lastIn.equals(inputLine))
 	        		Thread.sleep(1000);
 	        	else {
@@ -44,11 +52,13 @@ public class HandleConnectionThread extends Thread {
 		        	
 		        	if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 		        		pedidoRegisto ();
+		        		os.println("ACK");
 		        	} else
 		        		System.out.println("Servidor recusou o registo");
 		        	
 		        	if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 		        		pedidoLogin ();
+		        		os.println("ACK");
 		        	}
 		        	
 	        	}
@@ -98,7 +108,6 @@ public class HandleConnectionThread extends Thread {
 					
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
