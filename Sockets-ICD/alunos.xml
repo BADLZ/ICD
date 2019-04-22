@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+
+<alunos>
+	<aluno data_nascimento='29/06/1999' nAluno="45410">
+		<nome>Teste SubTeste</nome>
+	</aluno>
+</alunos>

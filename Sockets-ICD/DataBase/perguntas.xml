@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<perguntas>
+	<pergunta id="01">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>A</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+	<pergunta id="02">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>B</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+	<pergunta id="03">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>A</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+	<pergunta id="04">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>A</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+
+	<pergunta id="05">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>B</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+	<pergunta id="06">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>C</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+	<pergunta id="06">
+		<texto>texto pergunta<texto>
+		<opcoes> <!--SEMPRE 3-->
+			<opcao>Texto opcao A</opcao>
+			<opcao>Texto opcao B</opcao>
+			<opcao>Texto opcaoC</opcao>
+		</opcoes>
+		<respostaCerta>C</respostaCerta> <!--Apenas uma está correcta-->
+	</pergunta>
+
+
+</perguntas>
