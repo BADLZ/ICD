@@ -9,7 +9,7 @@ import java.net.Socket;
 import xml.xmlUtil;
 
 
-//oajsoijasdo
+//o
 public class HandleConnectionThread extends Thread {
 
     private Socket connection;
