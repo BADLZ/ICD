@@ -57,8 +57,8 @@ public class ClienteProfessor extends Thread {
 		do {
 			System.out.println();
 			System.out.println("** Menu **");
-			System.out.println("0. Terminar");
-			System.out.println("1. Escolher Pergunta");
+			System.out.println("0 - Terminar");
+			System.out.println("1 - Escolher Pergunta");
 			System.out.print("--> ");
 			try {
 				op = br.readLine().charAt(0);
