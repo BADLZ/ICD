@@ -2,7 +2,7 @@
 
 <perguntas>
 	<pergunta id="0">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta0</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -12,7 +12,7 @@
 	</pergunta>
 
 	<pergunta id="1">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta1</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -22,7 +22,7 @@
 	</pergunta>
 
 	<pergunta id="2">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta2</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -32,7 +32,7 @@
 	</pergunta>
 
 	<pergunta id="3">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta3</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -43,7 +43,7 @@
 
 
 	<pergunta id="4">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta4</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -53,7 +53,7 @@
 	</pergunta>
 
 	<pergunta id="5">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta5</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
@@ -63,7 +63,7 @@
 	</pergunta>
 
 	<pergunta id="6">
-		<texto>texto pergunta</texto>
+		<texto>texto pergunta6</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
 			<opcao>Texto opcao B</opcao>
