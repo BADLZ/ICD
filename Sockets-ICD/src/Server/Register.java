@@ -2,9 +2,6 @@ package Server;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -21,7 +18,7 @@ import org.w3c.dom.Element;
 //12
 public class Register {
 		
-	public boolean diaMesValido(int dia, String mes, int ano) {
+	public static boolean diaMesValido(int dia, String mes, int ano) {
 		//dias entre 1 e 31
 		if (dia < 1 && dia > 31) {
 			System.out.println("dia inválido");
@@ -71,7 +68,7 @@ public class Register {
 	
 	
 	
-	public void registarAluno(String nome, String data, int numero) {
+	public static void registarAluno(String nome, String data, int numero) {
 		
 		try {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -107,7 +104,7 @@ public class Register {
 		}
 	}
 	
-	public void removeEmptyLines(File f, PrintWriter write){
+	public static void removeEmptyLines(File f, PrintWriter write){
 		Scanner file = null;
 		try {
 			file = new Scanner(f);
