@@ -1,10 +1,13 @@
 package Client.Professor;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,6 +19,8 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import Server.Login;
 
 public class ClienteProfessor extends Thread {
 
@@ -52,30 +57,50 @@ public class ClienteProfessor extends Thread {
 			e.printStackTrace();
 		}
 		
-		char op;
+		//char op;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		Scanner sc = new Scanner(System.in);
+		int op;
+		
 		do {
 			System.out.println();
 			System.out.println("** Menu **");
 			System.out.println("0. Terminar");
-			System.out.println("1. Escolher Pergunta");
+			System.out.println("1. Mostrar Perguntas");
+			System.out.println("2. Escolher Aluno");
+			System.out.println("3. Escolher Pergunta");
 			System.out.print("--> ");
-			try {
+			op = sc.nextInt();
+
+			/*try {
 				op = br.readLine().charAt(0);
 			} catch (IOException e) {
 				e.printStackTrace();
 				break;
-			}
+			}*/
 			switch (op) {
-			case '1':
+			case 1:
 				showQuestions(doc);
 				break;
-			case '0':
+				
+			case 2:
+				questionTo();
+				break;
+				
+			case 3:				
+				System.out.print("Numero pergunta? ");
+				int numQuestion = sc.nextInt();
+				System.out.println(choseQuestion(doc, numQuestion));
+				break;
+				
+			case 0:
 				break;
 			default:
 				System.out.println("Opção inválida. Tente outra vez.");
+				//? op = sc.nextInt();
 			}
-		} while (op != '0');
+		} while (op != 0);
 		System.out.println("Terminou a execução.");
 	}
 	
@@ -88,9 +113,11 @@ public class ClienteProfessor extends Thread {
 		for (int i = 0; i < perguntas.getLength(); i++) {
 			Element pergunta = (Element) perguntas.item(i);				
 			NodeList texto = pergunta.getElementsByTagName("texto");
-			System.out.println(numbQuestions + " - " + texto);
-			numbQuestions++;
-			
+
+			for (int j = 0; j < texto.getLength(); j++) {
+				System.out.println(numbQuestions + " - " +texto.item(j).getTextContent());
+				numbQuestions++;
+			}	
 		}
 	
 	}
@@ -112,6 +139,102 @@ public class ClienteProfessor extends Thread {
 		
 		return pergunta;
 	}
+	
+	public void questionTo() {
+		
+		Scanner kb = new Scanner(System.in);
+		
+		System.out.println("Para quem?");
+		System.out.println("1 - todos\n2 - aluno em particular"); 
+		int opcao = kb.nextInt();
+		while (opcao < 1 || opcao > 2) {
+			System.out.print("Opcao errada ");
+			opcao = kb.nextInt();
+		}
+		
+		switch (opcao) {
+		
+		case 1:
+			System.out.println(Arrays.toString(todosAlunos()));
+			break;
+			
+		case 2:
+			System.out.print("Número do aluno? ");
+			int num = kb.nextInt();			
+			alunoParticular(num);			
+			break;
+		}
+	}
+	
+	// //aluno[@numero='45170']/nome/text()
+	public String alunoParticular(int numeroAluno) {
+		
+		Document doc = null;
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			doc = dBuilder.parse("correctAlunos.xml");			
+			doc.getDocumentElement().normalize();			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		String expressao = "//aluno[@numero='"+numeroAluno+"']/nome/text()";
+		String nomeAluno = null;
+		
+		try {
+			nomeAluno = (String) xpath.evaluate(expressao, doc, XPathConstants.STRING);
+		
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(nomeAluno);
+		return nomeAluno;		
+	}
+	
+	//nome/text()
+	public String[] todosAlunos() {
+		
+		Document doc = null;
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			doc = dBuilder.parse("correctAlunos.xml");			
+			doc.getDocumentElement().normalize();			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		String expressao = "//nome/text()";
+		
+		NodeList nodes;
+		try {
+			nodes = (NodeList) xpath.evaluate(expressao, doc,
+					XPathConstants.NODESET);
+			//return nodes;
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+			nodes = null;
+		}
+		
+		if (nodes == null) {
+			return null;
+		}
+		else {			
+			String[] retorno = new String[nodes.getLength()];
+			for (int i = 0; i < nodes.getLength(); i++) {
+				retorno[i] = nodes.item(i).getNodeValue();
+			}
+			//System.out.println(retorno);
+			return retorno;
+		}
+	}
+	
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		ClienteProfessor c = new ClienteProfessor();

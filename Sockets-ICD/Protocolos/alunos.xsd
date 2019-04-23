@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="nome" type="xs:string"/>
+	<xs:element name="alunos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="aluno" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="aluno">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="nome"/>
+			</xs:sequence>
+			<xs:attribute name="numero" type="xs:int" use="required"/>
+			<xs:attribute name="data_nascimento" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
