@@ -53,7 +53,6 @@ public class Login {
 			System.out.println("Aluno não encontrado");
 			return false;
 		}
-
 	}
 
 	// já se assume que o login foi aceite

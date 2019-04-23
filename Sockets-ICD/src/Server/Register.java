@@ -20,49 +20,7 @@ import org.w3c.dom.Element;
 
 //12
 public class Register {
-	
-	public static void main(String args[]) {
 		
-		Register r = new Register();
-		
-		Scanner sc = new Scanner(System.in);
-		
-		System.out.print("Nome? ");
-		String nome = sc.nextLine();
-		
-		int dia;
-		String mes;
-		int ano;
-		
-		do {
-			System.out.println("Data Nascimento - Formato dd/mm/aaaa");
-			System.out.print("Dia? ");
-			dia = sc.nextInt();
-			
-			sc.nextLine();
-			
-			System.out.print("Mes? ");
-			mes = sc.nextLine();
-				
-			System.out.print("Ano? ");
-			ano = sc.nextInt();
-			//String data = dia+"/"+mes+"/"+ano;
-		} while (!r.diaMesValido(dia, mes, ano));
-		
-		System.out.println("Número? ");
-		int numero = sc.nextInt();	
-	
-		if (mes.length() == 1) {
-			mes = "0"+Integer.parseInt(mes);
-		}
-		
-		String data = dia+"/"+mes+"/"+ano;
-		
-		r.registarAluno(nome, data, numero);
-	}
-	
-	
-	
 	public boolean diaMesValido(int dia, String mes, int ano) {
 		//dias entre 1 e 31
 		if (dia < 1 && dia > 31) {
@@ -149,8 +107,13 @@ public class Register {
 		}
 	}
 	
-	public void removeEmptyLines(File f, PrintWriter write) throws FileNotFoundException {
-		Scanner file = new Scanner(f);
+	public void removeEmptyLines(File f, PrintWriter write){
+		Scanner file = null;
+		try {
+			file = new Scanner(f);
+		} catch (FileNotFoundException e) {
+			System.out.println("File: " + f + " ,was no found" );
+		}
 		
 		boolean copia = false;
 		
