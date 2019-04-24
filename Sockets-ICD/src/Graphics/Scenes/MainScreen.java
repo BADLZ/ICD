@@ -66,7 +66,7 @@ public class MainScreen extends JLabel {
 		setIcon(sm.getBackground());
 		
 		server = new JLabel();
-		server.setBounds(10, 10, 100, 100);
+		server.setBounds(screenWidth - 200 , 10, 150, 150);
 		add(server);
 		
 		
