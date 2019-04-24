@@ -11,6 +11,7 @@ import xml.xmlUtil;
 //o123
 public class HandleConnectionThread extends Thread {
 
+	
 	private Socket connection;
 
 	private BufferedReader is = null;

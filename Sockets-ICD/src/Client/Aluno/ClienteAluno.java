@@ -1,11 +1,12 @@
 package Client.Aluno;
+
 import java.io.*;
 import java.net.*;
 
 import xml.xmlUtil;
 
 public class ClienteAluno extends Thread {
-	
+
 	final String host = "localhost";
 	final int port = 5025;
 	private Socket s;
@@ -14,15 +15,18 @@ public class ClienteAluno extends Thread {
 
 	public ClienteAluno() {
 		this.start();
+	}
+
+	public boolean tryConnect() {
 		try {
-			s = new Socket(host, port);				
+			s = new Socket(host, port);
 			is = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			os = new PrintWriter(s.getOutputStream(), true);
-		} catch (Exception e) {
-			System.err.println("Connection failed. " + e.getMessage());
-			return;
+			Executa();
+			return true;
+		} catch (IOException e1) {
+			return false;
 		}
-		Executa();
 	}
 
 	private void Executa() {
@@ -53,17 +57,22 @@ public class ClienteAluno extends Thread {
 				break;
 			case '0':
 				os.println("0");
-				try {Thread.sleep(100);}
-				catch (InterruptedException e) {e.printStackTrace();}
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				break;
 			default:
 				System.out.println("Opção inválida. Tente outra vez.");
 			}
-			
+
 			try {
 				System.out.println("Servidor > " + is.readLine());
-			} catch (IOException e) {e.printStackTrace();}
-			
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		} while (op != '0');
 		System.out.println("Terminou a execução.");
 	}
@@ -71,13 +80,14 @@ public class ClienteAluno extends Thread {
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		ClienteAluno c = new ClienteAluno();
+
 	}
 
 	private void Login(int numero) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
 					+ "</Login>";
-		
+
 			os.println(msg);
 
 			System.out.println("Conectar com o servidor");
@@ -85,12 +95,12 @@ public class ClienteAluno extends Thread {
 				System.out.println("Servidor não respondeu a tempo");
 				return;
 			}
-			
+
 			String inputline = is.readLine();
-			
+
 			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
 				os.println(numero);
-			}else {
+			} else {
 				System.out.println("Servidor não aceitou o login");
 			}
 
@@ -98,11 +108,12 @@ public class ClienteAluno extends Thread {
 			ex.printStackTrace();
 		}
 	}
+
 	private void Registar(String nome, String dataNascimento, int numero) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Registo>" + "<Registar/>"
 					+ "</Registo>";
-		
+
 			os.println(msg);
 
 			System.out.println("Conectar com o servidor");
@@ -110,9 +121,9 @@ public class ClienteAluno extends Thread {
 				System.out.println("Servidor não respondeu a tempo");
 				return;
 			}
-			
+
 			String inputline = is.readLine();
-			
+
 			if (xmlUtil.verificarResponse(inputline, "Accept.xsd")) {
 				msg = nome + "-" + dataNascimento + "-" + String.valueOf(numero);
 				os.println(msg);

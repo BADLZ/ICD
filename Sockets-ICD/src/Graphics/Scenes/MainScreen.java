@@ -1,14 +1,15 @@
 package Graphics.Scenes;
 
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,22 +20,57 @@ import Graphics.Aesthetics.FancyButton;
 
 public class MainScreen extends JLabel {
 
+	final String host = "localhost";
+	final int port = 5025;
+	
 	private SceneManager sm;
+	private JLabel server;
 	private ImageIcon quitBtnimg, quitBtnpressedimg, loginBtnimg, loginBtnpressedimg, registerBtnimg,
-			registerBtnpressedimg;
+			registerBtnpressedimg, serveron, serveroff;
 
 	private Dimension size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 	private final int screenWidth = size.width;
 	private final int screenHeight = size.height;
 
+	private boolean flag;
 	public MainScreen(SceneManager sm) {
 		this.sm = sm;
 		initialize();
+		
+
+		
+		Timer time = new Timer();
+		time.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				ping();
+			}
+		}, 0, 500);
 	}
 
+	private void ping() {
+		try {
+			Socket s = new Socket(host, port);
+			flag = true;
+			s.close();
+			server.setIcon(serveron);
+		} catch (IOException e) {
+			flag = false;
+			server.setIcon(serveroff);
+		}
+		
+	}
 	private void initialize() {
 		initializeImages();
 		setIcon(sm.getBackground());
+		
+		server = new JLabel();
+		server.setBounds(10, 10, 100, 100);
+		add(server);
+		
+		
+		
 		FancyButton quitBtn = new FancyButton("Meu Botao", screenWidth / 2 - 100, screenHeight / 2 + 100, 200, 67,
 				quitBtnimg, quitBtnpressedimg);
 		add(quitBtn);
@@ -73,7 +109,8 @@ public class MainScreen extends JLabel {
 			}
 		});
 		add(quitbtn);
-
+		
+		
 	}
 
 	private void initializeImages() {
@@ -84,6 +121,8 @@ public class MainScreen extends JLabel {
 			registerBtnpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/registerBtnpressed.png")));
 			quitBtnimg = new ImageIcon(ImageIO.read(new File("src/Images/quitBtn.png")));
 			quitBtnpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/quitBtnpressed.png")));
+			serveron =  new ImageIcon(ImageIO.read(new File("src/Images/server_ok.png")));
+			serveroff =  new ImageIcon(ImageIO.read(new File("src/Images/server_error.png")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
