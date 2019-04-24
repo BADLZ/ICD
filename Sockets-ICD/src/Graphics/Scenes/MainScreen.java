@@ -53,7 +53,6 @@ public class MainScreen extends JLabel {
 		try {
 			Socket s = new Socket(host, port);
 			flag = true;
-			s.close();
 			server.setIcon(serveron);
 		} catch (IOException e) {
 			flag = false;
