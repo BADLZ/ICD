@@ -43,12 +43,12 @@ public class ClienteAluno extends Thread {
 			}
 			switch (op) {
 			case '1':
-				Login(45410);
+				Login(45170);
 				break;
 			case '2':
 				String nome = "Pedro Dias";
 				String data = "12/03/1945";
-				int numero = 45410;
+				int numero = 55555;
 				Registar(nome, data, numero);
 				break;
 			case '0':
@@ -88,7 +88,7 @@ public class ClienteAluno extends Thread {
 			
 			String inputline = is.readLine();
 			
-			if (xmlUtil.verificarResponse(inputline, "Accept.xsd")) {
+			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
 				os.println(numero);
 			}else {
 				System.out.println("Servidor não aceitou o login");
@@ -114,7 +114,7 @@ public class ClienteAluno extends Thread {
 			String inputline = is.readLine();
 			
 			if (xmlUtil.verificarResponse(inputline, "Accept.xsd")) {
-				msg = nome + " " + dataNascimento + " " + String.valueOf(numero);
+				msg = nome + "-" + dataNascimento + "-" + String.valueOf(numero);
 				os.println(msg);
 			} else {
 				System.out.println("Servidor negou o Registo");

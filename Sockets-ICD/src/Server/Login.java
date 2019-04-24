@@ -23,7 +23,6 @@ public class Login {
 		}
 
 		if (ret.equals("true")) {
-			//welcome(doc, numero);
 			return true;
 		} else {
 			System.out.println("Aluno não encontrado");

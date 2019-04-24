@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 
 import xml.xmlUtil;
 
@@ -63,7 +62,6 @@ public class HandleConnectionThread extends Thread {
 						pedidoLogin();
 						os.println("ACK");
 					}
-
 				}
 			}
 
@@ -135,21 +133,20 @@ public class HandleConnectionThread extends Thread {
 
 		if (waitMessage()) {
 			try {
-				String[] info = is.readLine().split(" ");
-				//12/03/1945
+				String[] info = is.readLine().split("-");
 				String[] data = info[1].split("/");
-				if(Register.diaMesValido(Integer.parseInt(data[0]), data[1], 
-						Integer.parseInt((data[2])))) {
-					if(Login.alunoExiste(docload.getAlunosDoc(), Integer.parseInt(info[2]))) {
-						
-					}else {
-						System.out.println("Utilizador Existe");
+				if (Register.diaMesValido(Integer.parseInt(data[0]), data[1], Integer.parseInt((data[2])))) {
+					if (!Login.alunoExiste(docload.getAlunosDoc(), Integer.parseInt(info[2]))) {
+						Register.registarAluno(info[0], info[1], Integer.parseInt(info[2]));
+						System.out.println("Foi registado com sucesso->" + info[0] + " nº" + info[2]);
+					} else {
+						System.out.println("Utilizador Existe->" + info[2]);
 					}
-				}else {
+				} else {
 					System.out.println("Data não esta certa");
 					return;
 				}
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
