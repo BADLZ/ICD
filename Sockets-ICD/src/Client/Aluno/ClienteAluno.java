@@ -15,7 +15,7 @@ public class ClienteAluno extends Thread {
 	public ClienteAluno() {
 		this.start();
 		try {
-			s = new Socket(InetAddress.getLocalHost(), port);				
+			s = new Socket(host, port);				
 			is = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			os = new PrintWriter(s.getOutputStream(), true);
 		} catch (Exception e) {
@@ -75,8 +75,8 @@ public class ClienteAluno extends Thread {
 
 	private void Login(int numero) {
 		try {
-			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Registo>" + "<Registar/>"
-					+ "</Registo>";
+			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
+					+ "</Login>";
 		
 			os.println(msg);
 

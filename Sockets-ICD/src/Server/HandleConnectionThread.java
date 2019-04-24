@@ -55,9 +55,7 @@ public class HandleConnectionThread extends Thread {
 					if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
 						os.println("ACK");
-					} else
-						System.out.println("Servidor recusou o registo");
-
+					}
 					if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
 						os.println("ACK");
