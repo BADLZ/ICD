@@ -1,11 +1,14 @@
 package Server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
 
+	static ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
 	public final static int DEFAULT_PORT = 5025;
 
 	public static void main(String[] args) {
@@ -28,13 +31,13 @@ public class Server {
 			Socket newSock = null;
 
 			for (;;) {
-				System.out.println("Servidor TCP aguarda ligacao no porto: " + port + "...");
-
 				// Espera connect do cliente
 				newSock = serverSocket.accept();
-
-				Thread th = new HandleConnectionThread(newSock);
-				th.start();
+				if(!addresses.contains(newSock.getInetAddress())) {
+					addresses.add(newSock.getInetAddress());
+					Thread th = new HandleConnectionThread(newSock);
+					th.start();
+				}
 			}
 		} catch (IOException e) {
 			System.err.println("Excepção no servidor: " + e);

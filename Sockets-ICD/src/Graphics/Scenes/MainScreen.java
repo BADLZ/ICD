@@ -46,7 +46,7 @@ public class MainScreen extends JLabel {
 			public void run() {
 				ping();
 			}
-		}, 0, 500);
+		}, 0, 5000);
 	}
 
 	private void ping() {
@@ -67,6 +67,7 @@ public class MainScreen extends JLabel {
 		server = new JLabel();
 		server.setBounds(screenWidth - 200 , 10, 150, 150);
 		add(server);
+		ping();
 		
 		
 		
