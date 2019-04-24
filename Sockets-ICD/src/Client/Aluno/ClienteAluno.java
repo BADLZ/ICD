@@ -15,17 +15,12 @@ public class ClienteAluno extends Thread {
 
 	public ClienteAluno() {
 		this.start();
-	}
-
-	public boolean tryConnect() {
 		try {
 			s = new Socket(host, port);
 			is = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			os = new PrintWriter(s.getOutputStream(), true);
 			Executa();
-			return true;
 		} catch (IOException e1) {
-			return false;
 		}
 	}
 
@@ -85,7 +80,7 @@ public class ClienteAluno extends Thread {
 
 	private void Login(int numero) {
 		try {
-			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
+			String msg = "<?xml version='1.0' encodinbg='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
 					+ "</Login>";
 
 			os.println(msg);

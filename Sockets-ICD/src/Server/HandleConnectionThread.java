@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketAddress;
+import java.util.ArrayList;
 
 import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
 
-	
+	ArrayList<SocketAddress> r = new ArrayList<SocketAddress>();
 	private Socket connection;
 
 	private BufferedReader is = null;
@@ -31,7 +33,11 @@ public class HandleConnectionThread extends Thread {
 		try {
 			// circuito virtual estabelecido: socket cliente na variavel newSock
 			System.out.println("Thread " + this.getId() + ": " + connection.getRemoteSocketAddress());
-
+			if(!r.contains(connection.getRemoteSocketAddress()))
+				r.add(connection.getRemoteSocketAddress());
+			else
+				connection.close();
+			
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			os = new PrintWriter(connection.getOutputStream(), true);
