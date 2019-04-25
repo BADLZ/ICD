@@ -10,9 +10,9 @@ import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
-	
+
 	private Server mainThread;
-	
+
 	private Socket connection;
 
 	private BufferedReader is = null;
@@ -21,7 +21,7 @@ public class HandleConnectionThread extends Thread {
 	private DocumentLoader docload;
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
-	
+
 	public HandleConnectionThread(Socket connection, Server mainThread) {
 		this.connection = connection;
 		docload = new DocumentLoader();
@@ -55,7 +55,11 @@ public class HandleConnectionThread extends Thread {
 				else {
 					System.out.println("Instrucao -> " + inputLine);
 					lastIn = inputLine;
-
+					System.out.println(inputLine);
+					if (xmlUtil.verificarResponse(inputLine, "listar.xsd")) {
+						listarAlunos();
+						os.println("ACK");
+					}
 					if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
 						os.println("ACK");
@@ -66,7 +70,7 @@ public class HandleConnectionThread extends Thread {
 					}
 				}
 			}
-			
+
 		} catch (IOException e) {
 			System.err.println("Erro na ligaçao " + connection + ": " + e.getMessage());
 		} catch (InterruptedException e) {
@@ -85,6 +89,13 @@ public class HandleConnectionThread extends Thread {
 			}
 		}
 	} // end run
+
+	private void listarAlunos() {
+		
+		String lista = mainThread.alunos.toString();
+		System.out.println(lista);
+		os.println(lista);
+	}
 
 	private void pedidoLogin() {
 		String s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<True/>"
