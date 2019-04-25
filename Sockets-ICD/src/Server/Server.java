@@ -35,7 +35,7 @@ public class Server {
 				newSock = serverSocket.accept();
 				if(!addresses.contains(newSock.getInetAddress())) {
 					addresses.add(newSock.getInetAddress());
-					Thread th = new HandleConnectionThread(newSock);
+					Thread th = new HandleConnectionThread(newSock, null);
 					th.start();
 				}
 			}

@@ -10,10 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.w3c.dom.Document;
+
 import Graphics.Scenes.LoginWindow;
 import Graphics.Scenes.MainScreen;
+import Server.DocumentLoader;
 
 public class SceneManager {
+	private DocumentLoader docLoad;
 	private JFrame frame;
 	private CardLayout cl;
 	private JPanel cards;
@@ -26,6 +30,7 @@ public class SceneManager {
 	public final int screenWidth = size.width;
 	public final int screenHeight = size.height;
 	public SceneManager() {
+		docLoad = new DocumentLoader();
 		
 		try {
 			background = new ImageIcon(ImageIO.read(new File("src/Images/isel.png")).getScaledInstance(screenWidth, screenHeight, Image.SCALE_SMOOTH));
@@ -71,6 +76,10 @@ public class SceneManager {
 	
 	public JFrame getFrame() {
 		return frame;
+	}
+	
+	public Document getdocLoad() {
+		return docLoad.getAlunosDoc();
 	}
 	
 	public ImageIcon getBackground() {

@@ -5,15 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 
 import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
-
-	ArrayList<SocketAddress> r = new ArrayList<SocketAddress>();
+	
+	private static ArrayList<String> alunos = new ArrayList<String>();
+	private String id;
+	
 	private Socket connection;
 
 	private BufferedReader is = null;
@@ -22,10 +23,12 @@ public class HandleConnectionThread extends Thread {
 	private DocumentLoader docload;
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
-
-	public HandleConnectionThread(Socket connection) {
+	
+	public HandleConnectionThread(Socket connection, String id) {
 		this.connection = connection;
 		docload = new DocumentLoader();
+		if (!alunos.contains(id)) alunos.add(id);
+		this.id = id;
 	}
 
 	public void run() {
@@ -33,11 +36,7 @@ public class HandleConnectionThread extends Thread {
 		try {
 			// circuito virtual estabelecido: socket cliente na variavel newSock
 			System.out.println("Thread " + this.getId() + ": " + connection.getRemoteSocketAddress());
-			if(!r.contains(connection.getRemoteSocketAddress()))
-				r.add(connection.getRemoteSocketAddress());
-			else
-				connection.close();
-			
+
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
 			os = new PrintWriter(connection.getOutputStream(), true);
@@ -69,8 +68,9 @@ public class HandleConnectionThread extends Thread {
 					}
 				}
 			}
-
-			// os.println("@" + inputLine.toUpperCase());
+			
+			alunos.remove(id);
+			
 		} catch (IOException e) {
 			System.err.println("Erro na ligaçao " + connection + ": " + e.getMessage());
 		} catch (InterruptedException e) {
@@ -110,7 +110,7 @@ public class HandleConnectionThread extends Thread {
 		if (waitMessage()) {
 			try {
 				String r = is.readLine();
-				if (Login.alunoExiste(docload.getAlunosDoc(), Integer.parseInt(r))) {
+				if (Login.alunoExiste(docload.getAlunosDoc(), r)) {
 					System.out.println("Foi Autenticado com sucesso");
 				}
 			} catch (IOException e) {
@@ -141,7 +141,7 @@ public class HandleConnectionThread extends Thread {
 				String[] info = is.readLine().split("-");
 				String[] data = info[1].split("/");
 				if (Register.diaMesValido(Integer.parseInt(data[0]), data[1], Integer.parseInt((data[2])))) {
-					if (!Login.alunoExiste(docload.getAlunosDoc(), Integer.parseInt(info[2]))) {
+					if (!Login.alunoExiste(docload.getAlunosDoc(), info[2])) {
 						Register.registarAluno(info[0], info[1], Integer.parseInt(info[2]));
 						System.out.println("Foi registado com sucesso->" + info[0] + " nº" + info[2]);
 					} else {

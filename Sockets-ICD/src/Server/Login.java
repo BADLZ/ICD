@@ -10,10 +10,10 @@ import org.w3c.dom.Document;
 public class Login {
 
 	// //aluno[@numero="45170"]/nome
-	public static boolean alunoExiste(Document doc, int numero) {
+	public static boolean alunoExiste(Document doc, String numero) {
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
-		String expressao = "//@numero='" + numero + "'";
+		String expressao = "//@numero='" + Integer.parseInt(numero) + "'";
 		String ret = null;
 		try {
 			ret = (String) xpath.evaluate(expressao, doc, XPathConstants.STRING);

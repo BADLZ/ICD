@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
+import Server.DocumentLoader;
 
 public class MainScreen extends JLabel {
 
