@@ -14,9 +14,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import Client.Aluno.ClienteAluno;
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
+import Server.HandleConnectionThread;
 import Server.Login;
 
 public class LoginWindow extends JLabel {
@@ -85,13 +87,7 @@ public class LoginWindow extends JLabel {
 	}
 
 	private void tryLogin() {
-		if(!(numberfield.getText().contentEquals("Enter Your Number")) 
-				&& numberfield.getText() != null 
-				&& Login.alunoExiste(sm.getdocLoad(), numberfield.getText())) {
-			sm.changeCards("WaitingQuestions");
-		}else {
-			error.setText("O utilizador não existe");
-		}
+
 	}
 
 }

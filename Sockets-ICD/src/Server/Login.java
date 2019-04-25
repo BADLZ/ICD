@@ -13,7 +13,7 @@ public class Login {
 	public static boolean alunoExiste(Document doc, String numero) {
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
-		String expressao = "//@numero='" + Integer.parseInt(numero) + "'";
+		String expressao = "//@numero='" + numero + "'";
 		String ret = null;
 		try {
 			ret = (String) xpath.evaluate(expressao, doc, XPathConstants.STRING);

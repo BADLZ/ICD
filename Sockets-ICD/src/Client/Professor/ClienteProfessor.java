@@ -1,11 +1,10 @@
 package Client.Professor;
 
 import java.io.BufferedReader;
-
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -20,7 +19,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import Server.Login;
+import Server.HandleConnectionThread;
+import Server.Server;
 
 public class ClienteProfessor extends Thread {
 
@@ -93,7 +93,9 @@ public class ClienteProfessor extends Thread {
 				int numQuestion = sc.nextInt();
 				System.out.println(choseQuestion(doc, numQuestion));
 				break;
-				
+			case 4:
+				ArrayList<HandleConnectionThread> peopleAlive = Server.getAlive();
+				System.out.println(peopleAlive.toString());
 			case 0:
 				break;
 			default:

@@ -72,12 +72,6 @@ public class ClienteAluno extends Thread {
 		System.out.println("Terminou a execução.");
 	}
 
-	public static void main(String[] args) {
-		@SuppressWarnings("unused")
-		ClienteAluno c = new ClienteAluno();
-
-	}
-
 	private void Login(int numero) {
 		try {
 			String msg = "<?xml version='1.0' encodinbg='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
@@ -102,6 +96,11 @@ public class ClienteAluno extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public static void main(String args[]) {
+		@SuppressWarnings("unused")
+		ClienteAluno c = new ClienteAluno();
 	}
 
 	private void Registar(String nome, String dataNascimento, int numero) {

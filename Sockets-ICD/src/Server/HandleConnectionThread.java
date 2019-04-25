@@ -5,15 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
 	
-	private static ArrayList<String> alunos = new ArrayList<String>();
-	private String id;
 	
 	private Socket connection;
 
@@ -24,11 +21,9 @@ public class HandleConnectionThread extends Thread {
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
 	
-	public HandleConnectionThread(Socket connection, String id) {
+	public HandleConnectionThread(Socket connection) {
 		this.connection = connection;
 		docload = new DocumentLoader();
-		if (!alunos.contains(id)) alunos.add(id);
-		this.id = id;
 	}
 
 	public void run() {
@@ -38,14 +33,18 @@ public class HandleConnectionThread extends Thread {
 			System.out.println("Thread " + this.getId() + ": " + connection.getRemoteSocketAddress());
 
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
 			os = new PrintWriter(connection.getOutputStream(), true);
 
 			String inputLine = "";
 			String lastIn = "";
 			for (;;) {
 				inputLine = is.readLine();
-
+				
+				
+				if(inputLine.equals("ping")) {
+					os.println("alive");
+				}
+				
 				if (inputLine.equals("0")) {
 					System.out.println("Thread " + this.getId() + " disconectou-se");
 					isOn = false;
@@ -69,7 +68,6 @@ public class HandleConnectionThread extends Thread {
 				}
 			}
 			
-			alunos.remove(id);
 			
 		} catch (IOException e) {
 			System.err.println("Erro na ligaçao " + connection + ": " + e.getMessage());
@@ -174,5 +172,14 @@ public class HandleConnectionThread extends Thread {
 			return false;
 		}
 	}
+
+	public BufferedReader getIs() {
+		return is;
+	}
+
+	public PrintWriter getOs() {
+		return os;
+	}
+	
 
 } // end HandleConnectionThread
