@@ -13,21 +13,11 @@ public class Server {
 	public final static int DEFAULT_PORT = 5025;
 
 	static ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
-	static ArrayList<HandleConnectionThread> clients = new ArrayList<HandleConnectionThread>();
-	static ServerSocket serverSocket;
+	public ArrayList<String> alunos = new ArrayList<String>();
 
-	public static void main(String[] args) {
+	public Server(){
 		int port = DEFAULT_PORT;
-
-		if (args.length > 0) {
-			try {
-				port = Integer.parseInt(args[0]);
-			} catch (NumberFormatException e) {
-				System.err.println("Erro no porto indicado");
-			}
-		}
-
-		serverSocket = null;
+		ServerSocket serverSocket = null;
 
 		try {
 			// Criar socket com uma determinada porta
@@ -40,8 +30,9 @@ public class Server {
 				newSock = serverSocket.accept();
 				if (!addresses.contains(newSock.getInetAddress())) {
 					addresses.add(newSock.getInetAddress());
-					HandleConnectionThread th = new HandleConnectionThread(newSock);
-					clients.add(th);
+					HandleConnectionThread a = new HandleConnectionThread(newSock, this);
+					alunos.add(a.name);
+					Thread th = a;
 					th.start();
 				}
 			}
@@ -50,26 +41,9 @@ public class Server {
 		}
 
 	} // end main
-
-	public static ArrayList<HandleConnectionThread> getAlive() {
-		try {
-			System.out.println(clients.size());
-			for (HandleConnectionThread hct : clients) {
-				PrintWriter send = hct.getOs();
-				BufferedReader receive = hct.getIs();
-				send.println("ping");
-
-				Thread.sleep(150);
-				System.out.println("here");
-				if (!receive.readLine().equals("alive")) {
-					clients.remove(hct);
-				}
-			}
-			return clients;
-		} catch (Exception e) {
-			System.out.println("Server GetAlive() Error");
-			e.printStackTrace();
-		}
-		return null;
+	public static void main (String args[]) {
+		Server s = new Server();
 	}
 } // end ServidorTCP
+
+

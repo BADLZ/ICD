@@ -93,9 +93,6 @@ public class ClienteProfessor extends Thread {
 				int numQuestion = sc.nextInt();
 				System.out.println(choseQuestion(doc, numQuestion));
 				break;
-			case 4:
-				ArrayList<HandleConnectionThread> peopleAlive = Server.getAlive();
-				System.out.println(peopleAlive.toString());
 			case 0:
 				break;
 			default:

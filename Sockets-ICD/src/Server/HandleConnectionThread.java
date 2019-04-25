@@ -11,6 +11,10 @@ import xml.xmlUtil;
 //o123
 public class HandleConnectionThread extends Thread {
 	
+	private Server mainThread;
+	
+	// Este nome tem de ser mudado quando o cliente dá login
+	public String name = "Peter Days";
 	
 	private Socket connection;
 
@@ -21,9 +25,10 @@ public class HandleConnectionThread extends Thread {
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
 	
-	public HandleConnectionThread(Socket connection) {
+	public HandleConnectionThread(Socket connection, Server mainThread) {
 		this.connection = connection;
 		docload = new DocumentLoader();
+		this.mainThread = mainThread;
 	}
 
 	public void run() {
@@ -33,18 +38,15 @@ public class HandleConnectionThread extends Thread {
 			System.out.println("Thread " + this.getId() + ": " + connection.getRemoteSocketAddress());
 
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
 			os = new PrintWriter(connection.getOutputStream(), true);
 
 			String inputLine = "";
 			String lastIn = "";
+			System.out.println("Threads Active: " + mainThread.alunos);
 			for (;;) {
 				inputLine = is.readLine();
-				
-				
-				if(inputLine.equals("ping")) {
-					os.println("alive");
-				}
-				
+
 				if (inputLine.equals("0")) {
 					System.out.println("Thread " + this.getId() + " disconectou-se");
 					isOn = false;
@@ -67,7 +69,6 @@ public class HandleConnectionThread extends Thread {
 					}
 				}
 			}
-			
 			
 		} catch (IOException e) {
 			System.err.println("Erro na ligaçao " + connection + ": " + e.getMessage());
@@ -172,14 +173,5 @@ public class HandleConnectionThread extends Thread {
 			return false;
 		}
 	}
-
-	public BufferedReader getIs() {
-		return is;
-	}
-
-	public PrintWriter getOs() {
-		return os;
-	}
-	
 
 } // end HandleConnectionThread

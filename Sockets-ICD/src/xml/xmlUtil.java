@@ -118,7 +118,6 @@ public class xmlUtil {
 			document = builder.parse(new InputSource(new StringReader(Listar)));
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
-			System.out.println("Não foi possivel verificar a resposta do servidor!");
 			return false;
 		}
 		if (!xmlUtil.Validar(document, "Protocolos\\" + protocoloXSD)) {

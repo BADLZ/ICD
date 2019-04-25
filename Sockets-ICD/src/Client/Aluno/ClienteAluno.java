@@ -74,7 +74,7 @@ public class ClienteAluno extends Thread {
 
 	private void Login(int numero) {
 		try {
-			String msg = "<?xml version='1.0' encodinbg='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
+			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
 					+ "</Login>";
 
 			os.println(msg);
