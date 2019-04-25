@@ -1,8 +1,6 @@
 package Server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,12 +10,14 @@ public class Server {
 
 	public final static int DEFAULT_PORT = 5025;
 
-	static ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
-	public ArrayList<String> alunos = new ArrayList<String>();
+	private ArrayList<InetAddress> addresses = new ArrayList<InetAddress>();
+	public ArrayList<String> alunos;
+	
 
 	public Server(){
 		int port = DEFAULT_PORT;
 		ServerSocket serverSocket = null;
+		alunos = new ArrayList<String>();
 
 		try {
 			// Criar socket com uma determinada porta
@@ -31,7 +31,6 @@ public class Server {
 				if (!addresses.contains(newSock.getInetAddress())) {
 					addresses.add(newSock.getInetAddress());
 					HandleConnectionThread a = new HandleConnectionThread(newSock, this);
-					alunos.add(a.name);
 					Thread th = a;
 					th.start();
 				}
@@ -42,7 +41,12 @@ public class Server {
 
 	} // end main
 	public static void main (String args[]) {
+		@SuppressWarnings("unused")
 		Server s = new Server();
+	}
+	
+	public ArrayList<String> getAlunos() {
+		return alunos;
 	}
 } // end ServidorTCP
 

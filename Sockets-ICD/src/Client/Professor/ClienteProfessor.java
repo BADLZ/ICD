@@ -1,10 +1,10 @@
 package Client.Professor;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -19,8 +19,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import Server.HandleConnectionThread;
-import Server.Server;
+import xml.xmlUtil;
+
 
 public class ClienteProfessor extends Thread {
 
@@ -93,6 +93,9 @@ public class ClienteProfessor extends Thread {
 				int numQuestion = sc.nextInt();
 				System.out.println(choseQuestion(doc, numQuestion));
 				break;
+			case 4:
+				getAlunos();
+				break;
 			case 0:
 				break;
 			default:
@@ -121,9 +124,31 @@ public class ClienteProfessor extends Thread {
 	
 	}
 	
-	
+	private void getAlunos() {
+		try {
+			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Listar>" + "<Alunos/>"
+					+ "</Listar>";
+			
+			os.println(msg);
+
+			if (!waitMessage()) {
+				System.out.println("Servidor não respondeu a tempo");
+				return;
+			}
+
+			String inputline = is.readLine();
+
+			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
+			} else {
+				System.out.println("Servidor não aceitou o pedido");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	// //pergunta[@id='2']/texto/text()
-	public String choseQuestion(Document doc, int numb) {
+	private String choseQuestion(Document doc, int numb) {
 		
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		String expressao = "//pergunta[@id='" + numb + "']/texto/text()";
@@ -139,7 +164,7 @@ public class ClienteProfessor extends Thread {
 		return pergunta;
 	}
 	
-	public void questionTo() {
+	private void questionTo() {
 		
 		Scanner kb = new Scanner(System.in);
 		
@@ -166,7 +191,7 @@ public class ClienteProfessor extends Thread {
 	}
 	
 	// //aluno[@numero='45170']/nome/text()
-	public String alunoParticular(int numeroAluno) {
+	private String alunoParticular(int numeroAluno) {
 		
 		Document doc = null;
 		try {
@@ -195,7 +220,7 @@ public class ClienteProfessor extends Thread {
 	}
 	
 	//nome/text()
-	public String[] todosAlunos() {
+	private String[] todosAlunos() {
 		
 		Document doc = null;
 		try {
@@ -233,7 +258,22 @@ public class ClienteProfessor extends Thread {
 			return retorno;
 		}
 	}
-	
+	private boolean waitMessage() {
+		int retry = 0;
+		try {
+			while (!is.ready() && retry < 500) {
+				retry++;
+				Thread.sleep(10);
+			}
+			if (retry == 500)
+				return false;
+			else
+				return true;
+		} catch (IOException | InterruptedException e) {
+			System.out.println("Wait message error");
+			return false;
+		}
+	}
 	public static void main(String[] args) {
 		@SuppressWarnings("unused")
 		ClienteProfessor c = new ClienteProfessor();

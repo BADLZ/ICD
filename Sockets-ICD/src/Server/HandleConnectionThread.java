@@ -13,9 +13,6 @@ public class HandleConnectionThread extends Thread {
 	
 	private Server mainThread;
 	
-	// Este nome tem de ser mudado quando o cliente dá login
-	public String name = "Peter Days";
-	
 	private Socket connection;
 
 	private BufferedReader is = null;
@@ -110,6 +107,8 @@ public class HandleConnectionThread extends Thread {
 			try {
 				String r = is.readLine();
 				if (Login.alunoExiste(docload.getAlunosDoc(), r)) {
+					mainThread.alunos.add(r);
+					System.out.println(mainThread.alunos.toString());
 					System.out.println("Foi Autenticado com sucesso");
 				}
 			} catch (IOException e) {
