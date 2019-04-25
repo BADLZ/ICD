@@ -43,7 +43,13 @@ public class HandleConnectionThread extends Thread {
 			System.out.println("Threads Active: " + mainThread.alunos);
 			for (;;) {
 				inputLine = is.readLine();
-
+				System.out.println("Instrucao -> " + inputLine);
+				
+				
+				if(inputLine.equals("")) {
+					continue;
+				}
+				
 				if (inputLine.equals("0")) {
 					System.out.println("Thread " + this.getId() + " disconectou-se");
 					isOn = false;
@@ -53,20 +59,14 @@ public class HandleConnectionThread extends Thread {
 				if (inputLine == null || lastIn.equals(inputLine))
 					Thread.sleep(1000);
 				else {
-					System.out.println("Instrucao -> " + inputLine);
-					lastIn = inputLine;
-					System.out.println(inputLine);
 					if (xmlUtil.verificarResponse(inputLine, "listar.xsd")) {
 						listarAlunos();
-						os.println("ACK");
 					}
 					if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
-						os.println("ACK");
 					}
 					if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
-						os.println("ACK");
 					}
 				}
 			}
@@ -93,7 +93,6 @@ public class HandleConnectionThread extends Thread {
 	private void listarAlunos() {
 		
 		String lista = mainThread.alunos.toString();
-		System.out.println(lista);
 		os.println(lista);
 	}
 

@@ -45,7 +45,7 @@ public class ClienteAluno extends Thread {
 			}
 			switch (op) {
 			case '1':
-				Login(45170);
+				Login(45123);
 				break;
 			case '2':
 				String nome = "Pedro Dias";

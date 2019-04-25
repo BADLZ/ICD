@@ -51,10 +51,6 @@ public class ClienteProfessor extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// char op;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		Scanner sc = new Scanner(System.in);
 		int op;
 
@@ -65,6 +61,7 @@ public class ClienteProfessor extends Thread {
 			System.out.println("1. Mostrar Perguntas");
 			System.out.println("2. Escolher Aluno");
 			System.out.println("3. Escolher Pergunta");
+			System.out.println("4. Listar Alunos");
 			System.out.print("--> ");
 			op = sc.nextInt();
 
@@ -123,6 +120,7 @@ public class ClienteProfessor extends Thread {
 					+ "</Listar>";
 
 			os.println(msg);
+			os.println();
 
 			if (!waitMessage()) {
 				System.out.println("Servidor não respondeu a tempo");

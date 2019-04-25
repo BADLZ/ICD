@@ -111,13 +111,11 @@ public class xmlUtil {
 		try {
 			builder = factory.newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
 			return false;
 		}
 		try {
 			document = builder.parse(new InputSource(new StringReader(Listar)));
 		} catch (SAXException | IOException e) {
-			e.printStackTrace();
 			return false;
 		}
 		if (!xmlUtil.Validar(document, "Protocolos\\" + protocoloXSD)) {
