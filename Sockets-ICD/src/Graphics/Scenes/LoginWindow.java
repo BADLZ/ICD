@@ -60,14 +60,14 @@ public class LoginWindow extends JLabel {
 		Font font = new Font("Consolas", Font.BOLD, 12);
 		error.setFont(font);
 		error.setForeground(Color.red);
-		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 15, 270, 30);
+		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 12, 270, 30);
 		add(error);
 
 		JLabel img1 = new JLabel(textfieldimg);
 		img1.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 135, 420, 150);
 		add(img1);
 
-		FancyButton btnLogin = new FancyButton("btnLogin", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 20, 200, 67,
+		FancyButton btnLogin = new FancyButton("btnLogin", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 17, 200, 67,
 				loginBtnimg, loginBtnpressedimg);
 
 		btnLogin.addMouseListener(new MouseAdapter() {
@@ -85,8 +85,15 @@ public class LoginWindow extends JLabel {
 		});
 		add(btnLogin);
 		
-		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 20, 200, 67,
-				loginBtnimg, loginBtnpressedimg);
+		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200, 67,
+				btnVoltarimg, btnVoltarpressedimg);
+		btnVoltar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				sm.changeCards("MainScreen");
+			}
+		});
+		add(btnVoltar);
 	}
 
 	private void tryLogin() {
