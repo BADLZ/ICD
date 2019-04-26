@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import xml.xmlUtil;
 
-public class ClienteAluno extends Thread {
+public class ClienteAluno {
 
 	final String host = "localhost";
 	final int port = 5025;
@@ -17,65 +17,15 @@ public class ClienteAluno extends Thread {
 	private PrintWriter os;
 
 	public ClienteAluno() {
-		this.start();
 		try {
 			s = new Socket(host, port);
 			is = new BufferedReader(new InputStreamReader(s.getInputStream()));
 			os = new PrintWriter(s.getOutputStream(), true);
-			Executa();
 		} catch (IOException e1) {
 		}
 	}
 
-	private void Executa() {
-		char op;
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		do {
-			System.out.println();
-			System.out.println("**** Menu ****");
-			System.out.println("0. Terminar");
-			System.out.println("1. Login");
-			System.out.println("2. Registar");
-			System.out.print("> ");
-			try {
-				op = br.readLine().charAt(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-				break;
-			}
-			switch (op) {
-			case '1':
-				Login(45123);
-				break;
-			case '2':
-				String nome = "Pedro Dias";
-				String data = "12/03/1945";
-				int numero = 55555;
-				Registar(nome, data, numero);
-				break;
-			case '0':
-				os.println("0");
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				break;
-			default:
-				System.out.println("Opção inválida. Tente outra vez.");
-			}
-
-			try {
-				System.out.println("Servidor > " + is.readLine());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		} while (op != '0');
-		System.out.println("Terminou a execução.");
-	}
-
-	private void Login(int numero) {
+	public boolean Login(String numero) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"
 					+ "</Login>";
@@ -85,13 +35,23 @@ public class ClienteAluno extends Thread {
 			System.out.println("Conectar com o servidor");
 			if (!waitMessage()) {
 				System.out.println("Servidor não respondeu a tempo");
-				return;
+				return false;
 			}
 
 			String inputline = is.readLine();
 
 			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
 				os.println(numero);
+				if (!waitMessage()) {
+					System.out.println("Servidor não respondeu a tempo");
+					return false;
+				}
+				
+				if(xmlUtil.verificarResponse(is.readLine(), "error.xsd")) {
+					return false;
+				}
+				
+				return true;
 			} else {
 				System.out.println("Servidor não aceitou o login");
 			}
@@ -99,14 +59,10 @@ public class ClienteAluno extends Thread {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-	public static void main(String args[]) {
-		@SuppressWarnings("unused")
-		ClienteAluno c = new ClienteAluno();
+		return false;
 	}
 
-	private void Registar(String nome, String dataNascimento, int numero) {
+	public void Registar(String nome, String dataNascimento, int numero) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Registo>" + "<Registar/>"
 					+ "</Registo>";
@@ -136,7 +92,7 @@ public class ClienteAluno extends Thread {
 	private boolean waitMessage() {
 		int retry = 0;
 		try {
-			while (!is.ready() && retry < 500) {
+			while (!is.ready() && retry < 200) {
 				retry++;
 				Thread.sleep(10);
 			}

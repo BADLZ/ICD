@@ -51,15 +51,14 @@ public class MainScreen extends JLabel {
 	}
 
 	private void ping() {
-		try {
-			Socket s = new Socket(host, port);
-			flag = true;
-			server.setIcon(serveron);
-		} catch (IOException e) {
-			flag = false;
-			server.setIcon(serveroff);
-		}
-		
+//		try {
+//			Socket s = new Socket(host, port);
+//			flag = true;
+//			server.setIcon(serveron);
+//		} catch (IOException e) {
+//			flag = false;
+//			server.setIcon(serveroff);
+//		}
 	}
 	private void initialize() {
 		initializeImages();

@@ -17,7 +17,7 @@ public class FancyTextField extends JTextField{
 		setBounds(posX, posY, width, height);
 		setText(placeholder);
 		setForeground(new Color(255,255,255));
-		setFont(new Font("Consolas", 0, 20));
+		setFont(new Font("Consolas", 0, 19));
 		setOpaque(false);
 		
 		addFocusListener(new FocusListener() {

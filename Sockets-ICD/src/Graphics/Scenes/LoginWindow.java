@@ -11,30 +11,28 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import Client.Aluno.ClienteAluno;
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
-import Server.DocumentLoader;
-import Server.Login;
 
 public class LoginWindow extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
 	private SceneManager sm;
-	private DocumentLoader docLoad;
-
+	private ClienteAluno c;
+	
 	private JLabel error;
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
 	public LoginWindow(SceneManager sm) {
 		this.sm = sm;
-		docLoad = new DocumentLoader();
+		c = new ClienteAluno();
 		initialize();
 	}
 
@@ -46,7 +44,7 @@ public class LoginWindow extends JLabel {
 			btnVoltarimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtn.png")));
 			btnVoltarpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtnpressed.png")));
 			textfieldimg = new ImageIcon(ImageIO.read(new File("src/Images/textfieldimg.png")));
-		
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -56,7 +54,7 @@ public class LoginWindow extends JLabel {
 				30);
 		add(numberfield);
 
-		error = new JLabel("",SwingConstants.CENTER);
+		error = new JLabel("", SwingConstants.CENTER);
 		Font font = new Font("Consolas", Font.BOLD, 12);
 		error.setFont(font);
 		error.setForeground(Color.red);
@@ -84,9 +82,9 @@ public class LoginWindow extends JLabel {
 			}
 		});
 		add(btnLogin);
-		
-		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200, 67,
-				btnVoltarimg, btnVoltarpressedimg);
+
+		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200,
+				67, btnVoltarimg, btnVoltarpressedimg);
 		btnVoltar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -98,10 +96,11 @@ public class LoginWindow extends JLabel {
 
 	private void tryLogin() {
 		String s = numberfield.getText();
-		if (s != null && Login.alunoExiste(docLoad.getAlunosDoc(), s)) {
-
+		
+		if (s != null && c.Login(s)) {
+			sm.changeCards("WaitingRoom");
 		} else {
-			
+
 			error.setText("O número que introduziu não é válido");
 			error.setOpaque(true);
 		}

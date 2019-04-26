@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 
 import Graphics.Scenes.LoginWindow;
 import Graphics.Scenes.MainScreen;
+import Graphics.Scenes.RegisterWindow;
 import Server.DocumentLoader;
 
 public class SceneManager {
@@ -24,6 +25,7 @@ public class SceneManager {
 	
 	private LoginWindow loginwindow;
 	private MainScreen mainscreen;
+	private RegisterWindow registerwindow;
 	
 	private ImageIcon background;
 	private Dimension size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -39,6 +41,7 @@ public class SceneManager {
 		}
 		loginwindow = new LoginWindow(this);
 		mainscreen = new MainScreen(this);
+		registerwindow = new RegisterWindow(this);
 		
 		frame = new JFrame();
 		cl = new CardLayout();
@@ -54,6 +57,7 @@ public class SceneManager {
 		
 		cards.add(mainscreen, "MainScreen");
 		cards.add(loginwindow, "LoginWindow");
+		cards.add(registerwindow, "RegisterWindow");
 		
 	}
 	

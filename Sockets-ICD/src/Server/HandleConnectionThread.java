@@ -120,6 +120,10 @@ public class HandleConnectionThread extends Thread {
 					mainThread.alunos.add(r);
 					System.out.println(mainThread.alunos.toString());
 					System.out.println("Foi Autenticado com sucesso");
+				}else {
+					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
+							+ "</Permissao>";
+					os.println(s);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
