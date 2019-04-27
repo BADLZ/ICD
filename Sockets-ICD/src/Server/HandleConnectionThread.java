@@ -6,6 +6,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import xml.xmlUtil;
 
 //o123
@@ -19,13 +23,15 @@ public class HandleConnectionThread extends Thread {
 	private BufferedReader is = null;
 	private PrintWriter os = null;
 
-	private DocumentLoader docload;
+	private DocumentLoader alunosdoc,perguntasDoc;
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
 
 	public HandleConnectionThread(Socket connection, Server mainThread) {
 		this.connection = connection;
-		docload = new DocumentLoader();
+		alunosdoc = new DocumentLoader("correctAlunos.xml");
+		perguntasDoc = new DocumentLoader("perguntas.xml");
+		
 		this.mainThread = mainThread;
 	}
 
@@ -93,7 +99,9 @@ public class HandleConnectionThread extends Thread {
 	} // end run
 
 	private void pedidoListarPerguntas() {
-		
+		Document d = perguntasDoc.getAlunosDoc();
+		Element root = d.getDocumentElement();
+		NodeList l = root.getElementsByTagName("");
 		
 	}
 
@@ -117,8 +125,9 @@ public class HandleConnectionThread extends Thread {
 		if (waitMessage()) {
 			try {
 				String r = is.readLine();
-				if (Login.alunoExiste(docload.getAlunosDoc(), r)) {
+				if (Login.alunoExiste(alunosdoc.getAlunosDoc(), r)) {
 					mainThread.alunos.add(r);
+					System.out.println("Novo aluno foi adicionado ao servidor");
 				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
 							+ "</Permissao>";
@@ -187,7 +196,7 @@ public class HandleConnectionThread extends Thread {
 		if (waitMessage()) {
 			try {
 				String[] second = is.readLine().split("-");
-				if (!Login.alunoExiste(docload.getAlunosDoc(), second[2])) {
+				if (!Login.alunoExiste(alunosdoc.getAlunosDoc(), second[2])) {
 					Register.registarAluno(second[0], second[1], Integer.parseInt(second[2]));
 				} else {
 					os.println("error");

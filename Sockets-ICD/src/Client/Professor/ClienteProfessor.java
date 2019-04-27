@@ -97,12 +97,7 @@ public class ClienteProfessor extends Thread {
 			}
 			
 			String inputline = is.readLine();
-			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
-				
-				
-			}else {
-				return;
-			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

@@ -9,7 +9,7 @@ import java.net.Socket;
 import xml.xmlUtil;
 
 public class ClienteAluno {
-	private final int MAX_RETRIES = 200;
+	private final int MAX_RETRIES = 350;
 	
 	final String host = "localhost";
 	final int port = 5025;
@@ -44,15 +44,11 @@ public class ClienteAluno {
 
 			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
 				os.println(numero);
-				if (!waitMessage()) {
-					System.out.println("Servidor não respondeu a tempo");
-					return false;
-				}
-
+				
 				if (xmlUtil.verificarResponse(is.readLine(), "error.xsd")) {
 					return false;
 				}
-
+				
 				return true;
 			} else {
 				System.out.println("Servidor não aceitou o login");

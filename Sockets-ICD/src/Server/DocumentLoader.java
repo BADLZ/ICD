@@ -7,11 +7,11 @@ import org.w3c.dom.Document;
 
 public class DocumentLoader {
 	Document alunosDoc;
-	public DocumentLoader() {
+	public DocumentLoader(String doc) {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			alunosDoc = dBuilder.parse("correctAlunos.xml");
+			alunosDoc = dBuilder.parse(doc);
 			alunosDoc.getDocumentElement().normalize();
 
 		} catch (Exception e) {
