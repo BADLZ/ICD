@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Server {
 
 	public final static int DEFAULT_PORT = 5025;
 
-	public ArrayList<String> alunos;
+	public HashMap<String, HandleConnectionThread> alunos;
 
 	public Server() {
 		int port = DEFAULT_PORT;
 		ServerSocket serverSocket = null;
-		alunos = new ArrayList<String>();
+		alunos = new HashMap<String, HandleConnectionThread>();
 
 		try {
 			// Criar socket com uma determinada porta
@@ -40,7 +41,7 @@ public class Server {
 		new Server();
 	}
 
-	public ArrayList<String> getAlunos() {
+	public HashMap<String, HandleConnectionThread> getAlunos() {
 		return alunos;
 	}
 } // end ServidorTCP

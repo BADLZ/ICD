@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -14,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import Client.Aluno.ClienteAluno;
@@ -31,16 +34,16 @@ public class TeacherDashboard extends JLabel {
 	private SceneManager sm;
 	private ClienteAluno c;
 	private ClienteProfessor p;
-	
+
 	private static JTree tree;
 	private JLabel error;
 	private JTextField numberfield;
-	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
-	
-	
+	private ImageIcon alunosimg, alunospressedimg, listarimg, listarpressedimg;
+
 	public static void main(String args[]) {
-		TeacherDashboard.TreeExample();
+
 	}
+
 	public TeacherDashboard(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
 		this.c = c;
@@ -49,81 +52,75 @@ public class TeacherDashboard extends JLabel {
 	}
 
 	private void initialize() {
-
+		setIcon(sm.getBackground());
 		try {
-			loginBtnimg = new ImageIcon(ImageIO.read(new File("src/Images/loginBtn.png")));
-			loginBtnpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/loginBtnpressed.png")));
-			btnVoltarimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtn.png")));
-			btnVoltarpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtnpressed.png")));
-			textfieldimg = new ImageIcon(ImageIO.read(new File("src/Images/textfieldimg.png")));
-
+			alunosimg = new ImageIcon(ImageIO.read(new File("src/Images/alunosimg.png")));
+			alunospressedimg = new ImageIcon(ImageIO.read(new File("src/Images/alunosimgpressed.png")));
+			listarimg = new ImageIcon(ImageIO.read(new File("src/Images/listarimg.png")));
+			listarpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/listarimgpressed.png")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		setIcon(sm.getBackground());
-		numberfield = new FancyTextField("Enter Your Number", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 73, 195,
-				30);
-		add(numberfield);
+		FancyButton alunosbtn = new FancyButton("alunosbtn", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 17, 200,
+				67, alunosimg, alunospressedimg);
 
-		error = new JLabel("", SwingConstants.CENTER);
-		Font font = new Font("Consolas", Font.BOLD, 12);
-		error.setFont(font);
-		error.setForeground(Color.red);
-		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 12, 270, 30);
-		add(error);
-
-		JLabel img1 = new JLabel(textfieldimg);
-		img1.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 135, 420, 150);
-		add(img1);
-
-		FancyButton btnLogin = new FancyButton("btnLogin", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 17, 200, 67,
-				loginBtnimg, loginBtnpressedimg);
-
-		btnLogin.addMouseListener(new MouseAdapter() {
+		alunosbtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				TreeExample();
+				listarAlunos();
 			}
 		});
+		add(alunosbtn);
 
-		add(btnLogin);
-
-		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200,
-				67, btnVoltarimg, btnVoltarpressedimg);
-		btnVoltar.addMouseListener(new MouseAdapter() {
+		FancyButton listarbtn = new FancyButton("listarbtn", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200,
+				67, listarimg, listarpressedimg);
+		listarbtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				sm.changeCards("MainScreen");
+				listarAlunos();
 			}
 		});
-		add(btnVoltar);
+		add(listarbtn);
 	}
-	  public static void TreeExample()
-	    {
-		   
-	        JFrame j = new JFrame();
-	        //create the root node
-	        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Categorias");
-	        //create the child nodes
-	        DefaultMutableTreeNode vegetableNode = new DefaultMutableTreeNode("Vegetables");
-	        DefaultMutableTreeNode fruitNode = new DefaultMutableTreeNode("Fruits");
-	        //add the child nodes to the root node
-	        root.add(vegetableNode);
-	        root.add(fruitNode);
-	         
-	        //create the tree by passing in the root node
-	        tree = new JTree(root);
-	        j.add(tree);
-	      
-	        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        j.setTitle("Lista de Perguntas");       
-	        j.setVisible(true);
-	    }
+
+	private void listarAlunos() {
+		String[] alunos = p.getAlunos().split("-");
+		if (alunos != null) {
+			TreeAlunos("Lista de Alunos Activos", "Alunos", alunos);
+		}
+	}
+
+	public void TreeAlunos(String title,String defaultRoot, String[] numbers) {
+
+		JFrame j = new JFrame();
+		j.setTitle(title);
+		// create the root node
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(defaultRoot);
+		
+		for(int i = 0 ; i < numbers.length ; i++) {
+			root.add(new DefaultMutableTreeNode(numbers[i]));
+		}
+
+		JTree tree = new JTree(root);
+		tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+		    @Override
+		    public void valueChanged(TreeSelectionEvent e) {
+		        DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		        System.out.println(selectedNode.getUserObject().toString());
+		    }
+
+		});
+		
+		j.add(tree);
+		j.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		j.setBounds(sm.screenWidth/2 - 150, sm.screenHeight/2 - 250, 300, 500);
+		j.setVisible(true);
+	}
 
 	private void tryLogin() {
 		String s = numberfield.getText();
-		if(s.charAt(0) == 'p') {
+		if (s.charAt(0) == 'p') {
 			sm.changeCards("TeacherLoginWindow");
 		}
 		if (s != null && c.Login(s)) {

@@ -5,16 +5,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Set;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
-	
+
 	private final int MAX_RETRIES = 200;
 	private Server mainThread;
 
@@ -23,7 +29,7 @@ public class HandleConnectionThread extends Thread {
 	private BufferedReader is = null;
 	private PrintWriter os = null;
 
-	private DocumentLoader alunosdoc,perguntasDoc;
+	private DocumentLoader alunosdoc, perguntasDoc;
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
 
@@ -31,7 +37,7 @@ public class HandleConnectionThread extends Thread {
 		this.connection = connection;
 		alunosdoc = new DocumentLoader("correctAlunos.xml");
 		perguntasDoc = new DocumentLoader("perguntas.xml");
-		
+
 		this.mainThread = mainThread;
 	}
 
@@ -67,13 +73,13 @@ public class HandleConnectionThread extends Thread {
 				else {
 					if (xmlUtil.verificarResponse(inputLine, "listar.xsd")) {
 						pedidoListarAlunos();
-					}else if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
+					} else if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
-					}else if (xmlUtil.verificarResponse(inputLine, "dateVerification.xsd")) {
+					} else if (xmlUtil.verificarResponse(inputLine, "dateVerification.xsd")) {
 						pedidoVericacaoData();
-					}else if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
+					} else if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
-					}else if(xmlUtil.verificarResponse(inputLine, "perguntaListar.xsd")){
+					} else if (xmlUtil.verificarResponse(inputLine, "perguntaListar.xsd")) {
 						pedidoListarPerguntas();
 					}
 				}
@@ -99,10 +105,32 @@ public class HandleConnectionThread extends Thread {
 	} // end run
 
 	private void pedidoListarPerguntas() {
-		Document d = perguntasDoc.getAlunosDoc();
-		Element root = d.getDocumentElement();
-		NodeList l = root.getElementsByTagName("");
-		
+
+		Document doc = alunosdoc.getAlunosDoc();
+
+		ArrayList<String> tipoCategorias = new ArrayList<String>();
+
+		NodeList perguntas = doc.getElementsByTagName("pergunta");
+
+		int subb = 0;
+
+		for (int i = 0; i < perguntas.getLength(); i++) {
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			String expressao = "//pergunta[last()-" + subb + "]/@categoria";
+			String ret = null;
+			try {
+				ret = (String) xpath.evaluate(expressao, doc, XPathConstants.STRING);
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+			subb++;
+			// System.out.println(ret);
+			if (!tipoCategorias.contains(ret)) {
+				tipoCategorias.add(ret);
+			}
+		}
+
+		System.out.println(tipoCategorias.toString());
 	}
 
 	private void pedidoLogin() {
@@ -126,7 +154,7 @@ public class HandleConnectionThread extends Thread {
 			try {
 				String r = is.readLine();
 				if (Login.alunoExiste(alunosdoc.getAlunosDoc(), r)) {
-					mainThread.alunos.add(r);
+					mainThread.alunos.put(r,this);
 					System.out.println("Novo aluno foi adicionado ao servidor");
 				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
@@ -141,8 +169,13 @@ public class HandleConnectionThread extends Thread {
 
 	private void pedidoListarAlunos() {
 
-		String lista = mainThread.alunos.toString();
-		os.println(lista);
+		Set<String> lista = mainThread.alunos.keySet();
+		StringBuilder list = new StringBuilder();
+		for(String s : lista) {
+			list.append(s);
+			list.append("-");
+		}
+		os.println(list);
 	}
 
 	private void pedidoVericacaoData() {

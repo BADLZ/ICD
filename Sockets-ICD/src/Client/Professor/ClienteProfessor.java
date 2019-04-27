@@ -61,7 +61,7 @@ public class ClienteProfessor extends Thread {
 
 	}
 
-	private void getAlunos() {
+	public String getAlunos() {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Listar>" + "<Alunos/>"
 					+ "</Listar>";
@@ -71,15 +71,16 @@ public class ClienteProfessor extends Thread {
 
 			if (!waitMessage()) {
 				System.out.println("Servidor não respondeu a tempo");
-				return;
+				return null;
 			}
 
 			String inputline = is.readLine();
-			System.out.println(inputline);
+			return inputline;
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		return null;
 	}
 
 	// //pergunta[@id='2']/texto/text()
