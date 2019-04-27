@@ -32,6 +32,7 @@
 				<xs:element ref="respostaCerta"/>
 			</xs:sequence>
 			<xs:attribute name="id" type="xs:byte" use="required"/>
+			<xs:attribute name="categoria" type="xs:byte" use="required"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="opcoes">
