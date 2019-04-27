@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Client.Aluno.ClienteAluno;
+import Client.Professor.ClienteProfessor;
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
@@ -25,14 +26,16 @@ public class LoginWindow extends JLabel {
 
 	private SceneManager sm;
 	private ClienteAluno c;
+	private ClienteProfessor p;
 	
 	private JLabel error;
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
-	public LoginWindow(SceneManager sm) {
+	public LoginWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
-		c = new ClienteAluno();
+		this.c = c;
+		this.p = p;
 		initialize();
 	}
 

@@ -2,8 +2,6 @@ package Graphics.Scenes;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -18,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Client.Aluno.ClienteAluno;
+import Client.Professor.ClienteProfessor;
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
@@ -28,14 +27,16 @@ public class RegisterWindow extends JLabel {
 
 	private SceneManager sm;
 	private ClienteAluno c;
-	
+	private ClienteProfessor p;
+
 	private JLabel error;
 	private JTextField numberfield, birthdayfield, namefield;
 	private ImageIcon registerBtnimg, registerBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
-	public RegisterWindow(SceneManager sm) {
+	public RegisterWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
-		c = new ClienteAluno();
+		this.c = c;
+		this.p = p;
 		initialize();
 	}
 
@@ -53,76 +54,72 @@ public class RegisterWindow extends JLabel {
 		}
 
 		setIcon(sm.getBackground());
-		
-		namefield = new FancyTextField("Enter Your Name", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 250, 195,
-				30);
+
+		namefield = new FancyTextField("Enter Your Name", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 250, 195, 30);
 		add(namefield);
-		
+
 		JLabel img1 = new JLabel(textfieldimg);
 		img1.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 310, 420, 150);
 		add(img1);
-		
+
 		numberfield = new FancyTextField("Enter Your Number", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 150, 195,
 				30);
 		add(numberfield);
-		
+
 		JLabel img2 = new JLabel(textfieldimg);
 		img2.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 210, 420, 150);
 		add(img2);
-		
-		birthdayfield = new FancyTextField("Birthday(dd/mm/yyyy)", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 50, 198,
-				30);
+
+		birthdayfield = new FancyTextField("Birthday(dd/mm/yyyy)", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 50,
+				198, 30);
 		birthdayfield.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(birthdayfield.getText().length() == 2) {
+				if (birthdayfield.getText().length() == 2) {
 					birthdayfield.setText(birthdayfield.getText() + "/");
 				}
-				if(birthdayfield.getText().length() == 5) {
+				if (birthdayfield.getText().length() == 5) {
 					birthdayfield.setText(birthdayfield.getText() + "/");
 				}
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 
 			}
 		});
 		add(birthdayfield);
-		
+
 		JLabel img3 = new JLabel(textfieldimg);
 		img3.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 110, 420, 150);
 		add(img3);
-
 
 		error = new JLabel("", SwingConstants.CENTER);
 		Font font = new Font("Consolas", Font.BOLD, 12);
 		error.setFont(font);
 		error.setForeground(Color.red);
-		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 12, 270, 30);
+		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 + 10, 270, 30);
 		add(error);
 
-
-
-		FancyButton btnRegisto = new FancyButton("btnRegisto", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 35, 200, 67,
-				registerBtnimg, registerBtnpressedimg);
+		FancyButton btnRegisto = new FancyButton("btnRegisto", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 35, 200,
+				67, registerBtnimg, registerBtnpressedimg);
 
 		btnRegisto.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tryLogin();
+				tryRegister();
 			}
 		});
 		btnRegisto.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					tryLogin();
+					tryRegister();
 			}
 		});
 		add(btnRegisto);
@@ -138,15 +135,25 @@ public class RegisterWindow extends JLabel {
 		add(btnVoltar);
 	}
 
-	private void tryLogin() {
-		String s = numberfield.getText();
-		
-		if (s != null && c.Login(s)) {
-			sm.changeCards("WaitingRoom");
-		} else {
+	private void tryRegister() {
+		String number = numberfield.getText();
+		String name = namefield.getText();
+		String date = birthdayfield.getText();
 
-			error.setText("O número que introduziu não é válido");
-			error.setOpaque(true);
+		if (name != null && number != null && date != null) {
+			if(c.VerificarData(date)) {
+				if (c.Registar(name, date, number)) {
+					sm.changeCards("WaitingRoom");
+				} else {
+					error.setText("Número já existe na base de dados");
+					error.setOpaque(true);
+				}
+			}else {
+				error.setText("Data mal formatada");
+				error.setOpaque(true);
+			}
+
+
 		}
 	}
 

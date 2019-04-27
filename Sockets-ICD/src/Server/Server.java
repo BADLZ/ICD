@@ -37,8 +37,7 @@ public class Server {
 	} // end main
 
 	public static void main(String args[]) {
-		@SuppressWarnings("unused")
-		Server s = new Server();
+		new Server();
 	}
 
 	public ArrayList<String> getAlunos() {

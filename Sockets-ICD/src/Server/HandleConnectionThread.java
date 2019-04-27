@@ -10,7 +10,8 @@ import xml.xmlUtil;
 
 //o123
 public class HandleConnectionThread extends Thread {
-
+	
+	private final int MAX_RETRIES = 200;
 	private Server mainThread;
 
 	private Socket connection;
@@ -44,12 +45,11 @@ public class HandleConnectionThread extends Thread {
 			for (;;) {
 				inputLine = is.readLine();
 				System.out.println("Instrucao -> " + inputLine);
-				
-				
-				if(inputLine.equals("")) {
+
+				if (inputLine.equals("")) {
 					continue;
 				}
-				
+
 				if (inputLine.equals("0")) {
 					System.out.println("Thread " + this.getId() + " disconectou-se");
 					isOn = false;
@@ -60,10 +60,13 @@ public class HandleConnectionThread extends Thread {
 					Thread.sleep(1000);
 				else {
 					if (xmlUtil.verificarResponse(inputLine, "listar.xsd")) {
-						listarAlunos();
+						pedidoListarAlunos();
 					}
 					if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
+					}
+					if (xmlUtil.verificarResponse(inputLine, "dateVerification.xsd")) {
+						pedidoVericacaoData();
 					}
 					if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
@@ -90,12 +93,6 @@ public class HandleConnectionThread extends Thread {
 		}
 	} // end run
 
-	private void listarAlunos() {
-		
-		String lista = mainThread.alunos.toString();
-		os.println(lista);
-	}
-
 	private void pedidoLogin() {
 		String s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<True/>"
 				+ "</Permissao>";
@@ -118,13 +115,49 @@ public class HandleConnectionThread extends Thread {
 				String r = is.readLine();
 				if (Login.alunoExiste(docload.getAlunosDoc(), r)) {
 					mainThread.alunos.add(r);
-					System.out.println(mainThread.alunos.toString());
-					System.out.println("Foi Autenticado com sucesso");
-				}else {
+				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
 							+ "</Permissao>";
 					os.println(s);
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void pedidoListarAlunos() {
+
+		String lista = mainThread.alunos.toString();
+		os.println(lista);
+	}
+
+	private void pedidoVericacaoData() {
+		String s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<True/>"
+				+ "</Permissao>";
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		os.println(s);
+
+		try {
+			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (waitMessage()) {
+			try {
+				String[] first = is.readLine().split("/");
+				if (!Register.diaMesValido(Integer.parseInt(first[0]), first[1], Integer.parseInt(first[2]))) {
+					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
+							+ "</Permissao>";
+					os.println(s);
+				}
+				System.out.println("Fine with date verification");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -147,23 +180,15 @@ public class HandleConnectionThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		if (waitMessage()) {
 			try {
-				String[] info = is.readLine().split("-");
-				String[] data = info[1].split("/");
-				if (Register.diaMesValido(Integer.parseInt(data[0]), data[1], Integer.parseInt((data[2])))) {
-					if (!Login.alunoExiste(docload.getAlunosDoc(), info[2])) {
-						Register.registarAluno(info[0], info[1], Integer.parseInt(info[2]));
-						System.out.println("Foi registado com sucesso->" + info[0] + " nº" + info[2]);
-					} else {
-						System.out.println("Utilizador Existe->" + info[2]);
-					}
+				String[] second = is.readLine().split("-");
+				if (!Login.alunoExiste(docload.getAlunosDoc(), second[2])) {
+					Register.registarAluno(second[0], second[1], Integer.parseInt(second[2]));
 				} else {
-					System.out.println("Data não esta certa");
+					os.println("error");
 					return;
 				}
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -173,11 +198,11 @@ public class HandleConnectionThread extends Thread {
 	private boolean waitMessage() {
 		int retry = 0;
 		try {
-			while (!is.ready() && retry < 500) {
+			while (!is.ready() && retry < MAX_RETRIES) {
 				retry++;
 				Thread.sleep(10);
 			}
-			if (retry == 500)
+			if (retry == MAX_RETRIES)
 				return false;
 			else
 				return true;

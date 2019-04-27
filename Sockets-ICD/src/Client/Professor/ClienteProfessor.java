@@ -37,65 +37,8 @@ public class ClienteProfessor extends Thread {
 			System.err.println("Connection failed. " + e.getMessage());
 			return;
 		}
-		Executa();
 	}
-
-	private void Executa() {
-
-		Document doc = null;
-		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			doc = dBuilder.parse("perguntas.xml");
-			doc.getDocumentElement().normalize();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		Scanner sc = new Scanner(System.in);
-		int op;
-
-		do {
-			System.out.println();
-			System.out.println("** Menu **");
-			System.out.println("0. Terminar");
-			System.out.println("1. Mostrar Perguntas");
-			System.out.println("2. Escolher Aluno");
-			System.out.println("3. Escolher Pergunta");
-			System.out.println("4. Listar Alunos");
-			System.out.print("--> ");
-			op = sc.nextInt();
-
-			/*
-			 * try { op = br.readLine().charAt(0); } catch (IOException e) {
-			 * e.printStackTrace(); break; }
-			 */
-			switch (op) {
-			case 1:
-				showQuestions(doc);
-				break;
-
-			case 2:
-				questionTo();
-				break;
-
-			case 3:
-				System.out.print("Numero pergunta? ");
-				int numQuestion = sc.nextInt();
-				System.out.println(choseQuestion(doc, numQuestion));
-				break;
-			case 4:
-				getAlunos();
-				break;
-			case 0:
-				break;
-			default:
-				System.out.println("Opção inválida. Tente outra vez.");
-				// ? op = sc.nextInt();
-			}
-		} while (op != 0);
-		System.out.println("Terminou a execução.");
-	}
-
+	
 	public void showQuestions(Document doc) {
 
 		int numbQuestions = 0;
