@@ -61,15 +61,14 @@ public class HandleConnectionThread extends Thread {
 				else {
 					if (xmlUtil.verificarResponse(inputLine, "listar.xsd")) {
 						pedidoListarAlunos();
-					}
-					if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
+					}else if (xmlUtil.verificarResponse(inputLine, "registo.xsd")) {
 						pedidoRegisto();
-					}
-					if (xmlUtil.verificarResponse(inputLine, "dateVerification.xsd")) {
+					}else if (xmlUtil.verificarResponse(inputLine, "dateVerification.xsd")) {
 						pedidoVericacaoData();
-					}
-					if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
+					}else if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
+					}else if(xmlUtil.verificarResponse(inputLine, "perguntaListar.xsd")){
+						pedidoListarPerguntas();
 					}
 				}
 			}
@@ -92,6 +91,11 @@ public class HandleConnectionThread extends Thread {
 			}
 		}
 	} // end run
+
+	private void pedidoListarPerguntas() {
+		
+		
+	}
 
 	private void pedidoLogin() {
 		String s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<True/>"

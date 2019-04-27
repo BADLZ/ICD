@@ -19,6 +19,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import xml.xmlUtil;
+
 public class ClienteProfessor extends Thread {
 
 	final int port = 5025;
@@ -28,6 +30,7 @@ public class ClienteProfessor extends Thread {
 	private PrintWriter os;
 
 	private String ListaAlunos;
+
 	public ClienteProfessor() {
 		this.start();
 		try {
@@ -39,7 +42,7 @@ public class ClienteProfessor extends Thread {
 			return;
 		}
 	}
-	
+
 	public void showQuestions(Document doc) {
 
 		int numbQuestions = 0;
@@ -80,6 +83,31 @@ public class ClienteProfessor extends Thread {
 	}
 
 	// //pergunta[@id='2']/texto/text()
+	public void getQuestionsFromServer() {
+		try {
+			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Listar>" + "<Perguntas/>"
+					+ "</Listar>";
+
+			os.println(msg);
+			os.println();
+
+			if (!waitMessage()) {
+				System.out.println("Servidor não respondeu a tempo");
+				return;
+			}
+			
+			String inputline = is.readLine();
+			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
+				
+				
+			}else {
+				return;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
 	private String choseQuestion(Document doc, int numb) {
 
 		XPath xpath = XPathFactory.newInstance().newXPath();

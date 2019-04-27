@@ -25,17 +25,11 @@ public class TeacherLoginWindow extends JLabel {
 	private static final long serialVersionUID = 1L;
 
 	private SceneManager sm;
-	private ClienteAluno c;
-	private ClienteProfessor p;
-
-	private JLabel error;
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
-	public TeacherLoginWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
+	public TeacherLoginWindow(SceneManager sm) {
 		this.sm = sm;
-		this.c = c;
-		this.p = p;
 		initialize();
 	}
 
@@ -56,10 +50,10 @@ public class TeacherLoginWindow extends JLabel {
 
 		JLabel warning = new JLabel("", SwingConstants.CENTER);
 		warning.setForeground(Color.red);
-		warning.setFont(new Font("Consolas", Font.BOLD, 19));
+		warning.setFont(new Font("Consolas", Font.BOLD, 35));
 		warning.setText("If you are not a teacher please return to the mainscreen");
-		warning.setBounds(sm.screenWidth / 2, 40, sm.screenWidth, 30);
-
+		warning.setBounds(0, 40, sm.screenWidth, 30);
+		add(warning);
 		numberfield = new FancyTextField("Enter Your Password", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 73, 195,
 				30);
 		add(numberfield);

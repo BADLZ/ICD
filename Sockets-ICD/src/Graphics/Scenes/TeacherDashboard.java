@@ -10,15 +10,19 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import Client.Aluno.ClienteAluno;
 import Client.Professor.ClienteProfessor;
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
+import javax.swing.JList;
+import javax.swing.JTree;
 
 public class TeacherDashboard extends JLabel {
 
@@ -28,10 +32,15 @@ public class TeacherDashboard extends JLabel {
 	private ClienteAluno c;
 	private ClienteProfessor p;
 	
+	private static JTree tree;
 	private JLabel error;
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
-
+	
+	
+	public static void main(String args[]) {
+		TeacherDashboard.TreeExample();
+	}
 	public TeacherDashboard(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
 		this.c = c;
@@ -74,16 +83,10 @@ public class TeacherDashboard extends JLabel {
 		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				tryLogin();
+				TreeExample();
 			}
 		});
-		btnLogin.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					tryLogin();
-			}
-		});
+
 		add(btnLogin);
 
 		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200,
@@ -96,6 +99,27 @@ public class TeacherDashboard extends JLabel {
 		});
 		add(btnVoltar);
 	}
+	  public static void TreeExample()
+	    {
+		   
+	        JFrame j = new JFrame();
+	        //create the root node
+	        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Categorias");
+	        //create the child nodes
+	        DefaultMutableTreeNode vegetableNode = new DefaultMutableTreeNode("Vegetables");
+	        DefaultMutableTreeNode fruitNode = new DefaultMutableTreeNode("Fruits");
+	        //add the child nodes to the root node
+	        root.add(vegetableNode);
+	        root.add(fruitNode);
+	         
+	        //create the tree by passing in the root node
+	        tree = new JTree(root);
+	        j.add(tree);
+	      
+	        j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        j.setTitle("Lista de Perguntas");       
+	        j.setVisible(true);
+	    }
 
 	private void tryLogin() {
 		String s = numberfield.getText();

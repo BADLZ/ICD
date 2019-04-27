@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 <perguntas>
-	<pergunta id="0">
+	<pergunta id="0" categoria="geral">
 		<texto>texto pergunta0</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -11,7 +11,7 @@
 		<respostaCerta>A</respostaCerta> <!--Apenas uma está correcta-->
 	</pergunta>
 
-	<pergunta id="1">
+	<pergunta id="1" categoria="geral">
 		<texto>texto pergunta1</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -21,7 +21,7 @@
 		<respostaCerta>B</respostaCerta> <!--Apenas uma está correcta-->
 	</pergunta>
 
-	<pergunta id="2">
+	<pergunta id="2" categoria="matematica">
 		<texto>texto pergunta2</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -31,7 +31,7 @@
 		<respostaCerta>A</respostaCerta> <!--Apenas uma está correcta-->
 	</pergunta>
 
-	<pergunta id="3">
+	<pergunta id="3" categoria="geral">
 		<texto>texto pergunta3</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -42,7 +42,7 @@
 	</pergunta>
 
 
-	<pergunta id="4">
+	<pergunta id="4" categoria="telecomunicacoes">
 		<texto>texto pergunta4</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -52,7 +52,7 @@
 		<respostaCerta>B</respostaCerta> <!--Apenas uma está correcta-->
 	</pergunta>
 
-	<pergunta id="5">
+	<pergunta id="5" categoria="redes">
 		<texto>texto pergunta5</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>
@@ -62,7 +62,7 @@
 		<respostaCerta>C</respostaCerta> <!--Apenas uma está correcta-->
 	</pergunta>
 
-	<pergunta id="6">
+	<pergunta id="6" categoria="telecomunicacoes">
 		<texto>texto pergunta6</texto>
 		<opcoes> <!--SEMPRE 3-->
 			<opcao>Texto opcao A</opcao>

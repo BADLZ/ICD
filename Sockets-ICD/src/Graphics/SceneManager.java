@@ -54,7 +54,7 @@ public class SceneManager {
 		mainscreen = new MainScreen(this);
 		registerwindow = new RegisterWindow(this, c, p);
 		teacherdashboard = new TeacherDashboard(this,c,p);
-		teacherloginwindow = new TeacherLoginWindow(this, c, p);
+		teacherloginwindow = new TeacherLoginWindow(this);
 		waitingroom = new WaintingRoom(this, c, p);
 
 		frame = new JFrame();

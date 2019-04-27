@@ -99,13 +99,12 @@ public class LoginWindow extends JLabel {
 
 	private void tryLogin() {
 		String s = numberfield.getText();
-		if(s.charAt(0) == 'p') {
+		if(s.charAt(0) == 'p' || s.charAt(0) == 'P') {
 			sm.changeCards("TeacherLoginWindow");
 		}
-		if (s != null && c.Login(s)) {
+		else if (s != null && c.Login(s)) {
 			sm.changeCards("WaitingRoom");
 		} else {
-
 			error.setText("O número que introduziu não é válido");
 			error.setOpaque(true);
 		}
