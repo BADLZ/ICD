@@ -20,19 +20,19 @@ import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
 
-public class LoginWindow extends JLabel {
+public class TeacherLoginWindow extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
 	private SceneManager sm;
 	private ClienteAluno c;
 	private ClienteProfessor p;
-	
+
 	private JLabel error;
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
-	public LoginWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
+	public TeacherLoginWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
 		this.c = c;
 		this.p = p;
@@ -53,16 +53,16 @@ public class LoginWindow extends JLabel {
 		}
 
 		setIcon(sm.getBackground());
-		numberfield = new FancyTextField("Enter Your Number", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 73, 195,
+
+		JLabel warning = new JLabel("", SwingConstants.CENTER);
+		warning.setForeground(Color.red);
+		warning.setFont(new Font("Consolas", Font.BOLD, 19));
+		warning.setText("If you are not a teacher please return to the mainscreen");
+		warning.setBounds(sm.screenWidth / 2, 40, sm.screenWidth, 30);
+
+		numberfield = new FancyTextField("Enter Your Password", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 73, 195,
 				30);
 		add(numberfield);
-
-		error = new JLabel("", SwingConstants.CENTER);
-		Font font = new Font("Consolas", Font.BOLD, 12);
-		error.setFont(font);
-		error.setForeground(Color.red);
-		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 12, 270, 30);
-		add(error);
 
 		JLabel img1 = new JLabel(textfieldimg);
 		img1.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 135, 420, 150);
@@ -99,15 +99,8 @@ public class LoginWindow extends JLabel {
 
 	private void tryLogin() {
 		String s = numberfield.getText();
-		if(s.charAt(0) == 'p') {
-			sm.changeCards("TeacherLoginWindow");
-		}
-		if (s != null && c.Login(s)) {
-			sm.changeCards("WaitingRoom");
-		} else {
-
-			error.setText("O número que introduziu não é válido");
-			error.setOpaque(true);
+		if (s.equals("12345")) {
+			sm.changeCards("TeacherDashboard");
 		}
 	}
 

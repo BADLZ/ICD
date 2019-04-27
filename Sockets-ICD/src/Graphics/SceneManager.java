@@ -15,6 +15,9 @@ import Client.Professor.ClienteProfessor;
 import Graphics.Scenes.LoginWindow;
 import Graphics.Scenes.MainScreen;
 import Graphics.Scenes.RegisterWindow;
+import Graphics.Scenes.TeacherDashboard;
+import Graphics.Scenes.TeacherLoginWindow;
+import Graphics.Scenes.WaintingRoom;
 
 public class SceneManager {
 	private ClienteAluno c;
@@ -27,6 +30,10 @@ public class SceneManager {
 	private LoginWindow loginwindow;
 	private MainScreen mainscreen;
 	private RegisterWindow registerwindow;
+	private TeacherDashboard teacherdashboard;
+	private TeacherLoginWindow teacherloginwindow;
+	private WaintingRoom waitingroom;
+
 
 	private ImageIcon background;
 	private Dimension size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -46,6 +53,9 @@ public class SceneManager {
 		loginwindow = new LoginWindow(this, c, p);
 		mainscreen = new MainScreen(this);
 		registerwindow = new RegisterWindow(this, c, p);
+		teacherdashboard = new TeacherDashboard(this,c,p);
+		teacherloginwindow = new TeacherLoginWindow(this, c, p);
+		waitingroom = new WaintingRoom(this, c, p);
 
 		frame = new JFrame();
 		cl = new CardLayout();
@@ -61,7 +71,9 @@ public class SceneManager {
 		cards.add(mainscreen, "MainScreen");
 		cards.add(loginwindow, "LoginWindow");
 		cards.add(registerwindow, "RegisterWindow");
-
+		cards.add(teacherdashboard, "TeacherDashboard");
+		cards.add(teacherloginwindow, "TeacherLoginWindow");
+		cards.add(waitingroom, "WaitingRoom");
 	}
 
 	public boolean Login(int numero) {

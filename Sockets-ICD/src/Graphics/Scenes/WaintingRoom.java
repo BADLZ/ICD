@@ -20,7 +20,7 @@ import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
 import Graphics.Aesthetics.FancyTextField;
 
-public class LoginWindow extends JLabel {
+public class WaintingRoom extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,7 @@ public class LoginWindow extends JLabel {
 	private JTextField numberfield;
 	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
 
-	public LoginWindow(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
+	public WaintingRoom(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
 		this.sm = sm;
 		this.c = c;
 		this.p = p;

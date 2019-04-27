@@ -27,6 +27,7 @@ public class ClienteProfessor extends Thread {
 	private BufferedReader is;
 	private PrintWriter os;
 
+	private String ListaAlunos;
 	public ClienteProfessor() {
 		this.start();
 		try {
@@ -201,10 +202,5 @@ public class ClienteProfessor extends Thread {
 			System.out.println("Wait message error");
 			return false;
 		}
-	}
-
-	public static void main(String[] args) {
-		@SuppressWarnings("unused")
-		ClienteProfessor c = new ClienteProfessor();
 	}
 }

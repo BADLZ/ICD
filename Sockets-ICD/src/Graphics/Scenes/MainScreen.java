@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
-import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +15,6 @@ import javax.swing.JLabel;
 
 import Graphics.SceneManager;
 import Graphics.Aesthetics.FancyButton;
-import Server.DocumentLoader;
 
 public class MainScreen extends JLabel {
 
@@ -37,9 +34,7 @@ public class MainScreen extends JLabel {
 	public MainScreen(SceneManager sm) {
 		this.sm = sm;
 		initialize();
-		
-
-		
+				
 		Timer time = new Timer();
 		time.schedule(new TimerTask() {
 			
