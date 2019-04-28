@@ -85,6 +85,8 @@ public class HandleConnectionThread extends Thread {
 						pedidoListarPerguntas();
 					} else if (xmlUtil.verificarResponse(inputLine, "enviarPerguntas.xsd")) {
 						enviarPerguntas();
+					}else if(xmlUtil.verificarResponse(inputLine, "responderPergunta.xsd")) {
+						responderPergunta();
 					}
 				}
 			}
@@ -107,6 +109,10 @@ public class HandleConnectionThread extends Thread {
 			}
 		}
 	} // end run
+
+	private void responderPergunta() {
+		
+	}
 
 	private void enviarPerguntas() {
 		Document doc = perguntasDoc.getInfo();

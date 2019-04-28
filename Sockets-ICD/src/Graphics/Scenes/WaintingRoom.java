@@ -80,7 +80,7 @@ public class WaintingRoom extends JLabel {
 				Font font = new Font("Consolas", Font.PLAIN, 20);
 				o1.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				o1.setFont(font);
-				o1.setText(o2.getText());
+				o1.setText(o1.getText());
 
 			}
 
@@ -89,12 +89,12 @@ public class WaintingRoom extends JLabel {
 				Font font = new Font("Consolas", Font.BOLD, 22);
 				o1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				o1.setFont(font);
-				o1.setText(o2.getText());
+				o1.setText(o1.getText());
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				answerQuestion(1);
 
 			}
 		});
@@ -134,7 +134,7 @@ public class WaintingRoom extends JLabel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				answerQuestion(2);
 
 			}
 		});
@@ -160,7 +160,7 @@ public class WaintingRoom extends JLabel {
 				Font font = new Font("Consolas", Font.PLAIN, 20);
 				o3.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				o3.setFont(font);
-				o3.setText(o2.getText());
+				o3.setText(o3.getText());
 
 			}
 
@@ -169,13 +169,12 @@ public class WaintingRoom extends JLabel {
 				Font font = new Font("Consolas", Font.BOLD, 22);
 				o3.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				o3.setFont(font);
-				o3.setText(o2.getText());
+				o3.setText(o3.getText());
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
+				answerQuestion(3);
 			}
 		});
 
@@ -195,7 +194,8 @@ public class WaintingRoom extends JLabel {
 				if (sm.getActive().equals("WaitingRoom")) {
 					String rec = c.ReceiveQuestion();
 					if (rec != null) {
-						j.setText("Time Remaining");
+						j.setText("Answer the Question");
+						CountDownProgressBar();
 						String[] sep = rec.split("-");
 						p.setText(sep[0] + ":");
 						o1.setText("-" + sep[1]);
@@ -209,8 +209,14 @@ public class WaintingRoom extends JLabel {
 		}, 0, 500);
 
 	}
-
-	public void CountDownProgressBar() {
+	private void answerQuestion(int qnumber) {
+		if(c.answerQuestion(qnumber)) {
+			j.setText("Reposta Correta");
+		}else {
+			j.setText("Resposta Incorreta");
+		}
+	}
+	private void CountDownProgressBar() {
 
 		progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, MAX_VALUE);
 		progressBar.setVisible(true);

@@ -148,4 +148,37 @@ public class ClienteAluno {
 			return false;
 		}
 	}
+
+	public boolean answerQuestion(int qnumber) {
+		try {
+			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Responder>" + "<Pergunta/>"
+					+ "</Responder>";
+
+			os.println(msg);
+
+			System.out.println("Conectar com o servidor");
+			if (!waitMessage()) {
+				System.out.println("Servidor não respondeu a tempo");
+				return false;
+			}
+
+			String inputline = is.readLine();
+
+			if (xmlUtil.verificarResponse(inputline, "accept.xsd")) {
+				
+				os.println(qnumber);
+
+				if (waitMessage()) {
+					return false;
+				}
+				return true;
+			} else {
+				System.out.println("Servidor negou o Registo");
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return false;
+	}
 }
