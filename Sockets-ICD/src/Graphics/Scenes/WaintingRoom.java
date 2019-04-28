@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
@@ -41,9 +40,9 @@ public class WaintingRoom extends JLabel {
 	private void initialize() {
 		setIcon(sm.getBackground());
 
-		j = new JLabel("Waiting for teacher...", SwingConstants.CENTER);
+		j = new JLabel("Espera do Professor...", SwingConstants.CENTER);
 		Font f1 = new Font("Consolas", Font.BOLD, 40);
-		j.setBounds(0, 30, sm.screenWidth, 100);
+		j.setBounds(0, 30, sm.screenWidth, 165);
 		j.setFont(f1);
 		j.setBackground(Color.gray);
 		j.setOpaque(true);
@@ -94,8 +93,10 @@ public class WaintingRoom extends JLabel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				answerQuestion(1);
-
+				answerQuestion("A");
+				o1.setText("");
+				o2.setText("");
+				o3.setText("");
 			}
 		});
 
@@ -134,8 +135,10 @@ public class WaintingRoom extends JLabel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				answerQuestion(2);
-
+				answerQuestion("B");
+				o1.setText("");
+				o2.setText("");
+				o3.setText("");
 			}
 		});
 
@@ -174,7 +177,10 @@ public class WaintingRoom extends JLabel {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				answerQuestion(3);
+				answerQuestion("C");
+				o1.setText("");
+				o2.setText("");
+				o3.setText("");
 			}
 		});
 
@@ -209,11 +215,13 @@ public class WaintingRoom extends JLabel {
 		}, 0, 500);
 
 	}
-	private void answerQuestion(int qnumber) {
+	private void answerQuestion(String qnumber) {
 		if(c.answerQuestion(qnumber)) {
 			j.setText("Reposta Correta");
+			progressBar.setVisible(false);
 		}else {
 			j.setText("Resposta Incorreta");
+			progressBar.setVisible(false);
 		}
 	}
 	private void CountDownProgressBar() {
@@ -233,17 +241,15 @@ public class WaintingRoom extends JLabel {
 				progressBar.setString("Seconds Remaining: " + String.valueOf(counter));
 			}
 		};
-		javax.swing.Timer timer = new javax.swing.Timer(1000, listener);
+		timer = new javax.swing.Timer(1000, listener);
 		timer.start();
-		JLabel l = new JLabel();
 		Font d = new Font("Consolas", Font.PLAIN, 15);
 		progressBar.setFont(d);
 		progressBar.setForeground(Color.GREEN);
 		progressBar.setString("Seconds Remaining: " + String.valueOf(counter));
 		progressBar.setStringPainted(true);
-		progressBar.setBounds(sm.screenWidth/2 - sm.screenWidth/8, 50, sm.screenWidth/4, 100);
-		l.add(progressBar);
-		add(l);
+		progressBar.setBounds(sm.screenWidth/2 - 250, 200, 500, 50);
+		add(progressBar);
 
 	}
 

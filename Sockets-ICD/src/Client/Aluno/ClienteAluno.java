@@ -131,25 +131,8 @@ public class ClienteAluno {
 		}
 		return false;
 	}
-
-	private boolean waitMessage() {
-		int retry = 0;
-		try {
-			while (!is.ready() && retry < MAX_RETRIES ) {
-				retry++;
-				Thread.sleep(10);
-			}
-			if (retry == MAX_RETRIES)
-				return false;
-			else
-				return true;
-		} catch (IOException | InterruptedException e) {
-			System.out.println("Wait message error");
-			return false;
-		}
-	}
-
-	public boolean answerQuestion(int qnumber) {
+	
+	public boolean answerQuestion(String qnumber) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Responder>" + "<Pergunta/>"
 					+ "</Responder>";
@@ -181,4 +164,23 @@ public class ClienteAluno {
 		}
 		return false;
 	}
+	
+	private boolean waitMessage() {
+		int retry = 0;
+		try {
+			while (!is.ready() && retry < MAX_RETRIES ) {
+				retry++;
+				Thread.sleep(10);
+			}
+			if (retry == MAX_RETRIES)
+				return false;
+			else
+				return true;
+		} catch (IOException | InterruptedException e) {
+			System.out.println("Wait message error");
+			return false;
+		}
+	}
+
+
 }

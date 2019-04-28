@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +30,7 @@ public class HandleConnectionThread extends Thread {
 	private BufferedReader is = null;
 	private PrintWriter os = null;
 
+	private static String questaoAtual = "";
 	private DocumentLoader alunosdoc, perguntasDoc;
 	@SuppressWarnings("unused")
 	private boolean isOn = true;
@@ -85,7 +85,7 @@ public class HandleConnectionThread extends Thread {
 						pedidoListarPerguntas();
 					} else if (xmlUtil.verificarResponse(inputLine, "enviarPerguntas.xsd")) {
 						enviarPerguntas();
-					}else if(xmlUtil.verificarResponse(inputLine, "responderPergunta.xsd")) {
+					} else if (xmlUtil.verificarResponse(inputLine, "responderPergunta.xsd")) {
 						responderPergunta();
 					}
 				}
@@ -111,7 +111,39 @@ public class HandleConnectionThread extends Thread {
 	} // end run
 
 	private void responderPergunta() {
-		
+		String s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<True/>"
+				+ "</Permissao>";
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		os.println(s);
+
+		if (!waitMessage()) {
+			System.out.println("Servidor não respondeu a tempo");
+			return;
+		}
+
+		try {
+			String qnumber = is.readLine();
+
+			XPath xpath = XPathFactory.newInstance().newXPath();
+			System.out.println(questaoAtual);
+			String answer = "//pergunta[texto='" + questaoAtual + "']/respostaCerta/text()";
+			String valor = null;
+			try {
+				valor = (String) xpath.evaluate(answer, perguntasDoc.getInfo(), XPathConstants.STRING);
+			} catch (XPathExpressionException e) {
+				e.printStackTrace();
+			}
+			if(!qnumber.equalsIgnoreCase(valor)) {
+				os.println("ERROR");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void enviarPerguntas() {
@@ -123,7 +155,7 @@ public class HandleConnectionThread extends Thread {
 			StringBuilder ops = new StringBuilder();
 			for (int i = 1; i < 4; i++) {
 				XPath xpath = XPathFactory.newInstance().newXPath();
-				String opcoes = "//pergunta[texto='"+ s[0] +"']/opcoes/opcao[" + i + "]";
+				String opcoes = "//pergunta[texto='" + s[0] + "']/opcoes/opcao[" + i + "]";
 				String valor = null;
 				try {
 					valor = (String) xpath.evaluate(opcoes, doc, XPathConstants.STRING);
@@ -131,20 +163,19 @@ public class HandleConnectionThread extends Thread {
 					e.printStackTrace();
 				}
 				ops.append(valor);
-				ops.append("-"); 
+				ops.append("-");
 			}
+			questaoAtual = s[0];
 			ops.insert(0, s[0] + "-");
 			if (s[1].equalsIgnoreCase("todos")) {
 				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
 					entry.getValue().getOs().println(ops.toString());
-					System.out.println("Enviado-> " + ops.toString());
 				}
 			} else {
 				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
 					if (entry.getKey().equalsIgnoreCase(s[1])) {
 						entry.getValue().getOs().println(ops.toString());
-						System.out.println("Enviado-> " + ops.toString());
-						
+
 					}
 				}
 			}
@@ -200,8 +231,8 @@ public class HandleConnectionThread extends Thread {
 				String r = is.readLine();
 				if (Login.alunoExiste(alunosdoc.getInfo(), r)) {
 					mainThread.getAlunos().put(r, this);
-					os.println("<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Enter/>"
-							+ "</Permissao>");
+					os.println("<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>"
+							+ "<Enter/>" + "</Permissao>");
 					System.out.println("Novo aluno foi adicionado ao servidor");
 				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
