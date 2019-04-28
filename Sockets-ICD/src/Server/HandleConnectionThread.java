@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.xpath.XPath;
@@ -53,7 +54,7 @@ public class HandleConnectionThread extends Thread {
 
 			String inputLine = "";
 			String lastIn = "";
-			System.out.println("Threads Active: " + mainThread.alunos);
+			System.out.println("Threads Active: " + mainThread.getAlunos());
 			for (;;) {
 				inputLine = is.readLine();
 				System.out.println("Instrucao -> " + inputLine);
@@ -79,8 +80,10 @@ public class HandleConnectionThread extends Thread {
 						pedidoVericacaoData();
 					} else if (xmlUtil.verificarResponse(inputLine, "login.xsd")) {
 						pedidoLogin();
-					} else if (xmlUtil.verificarResponse(inputLine, "perguntaListar.xsd")) {
+					} else if (xmlUtil.verificarResponse(inputLine, "perguntasListar.xsd")) {
 						pedidoListarPerguntas();
+					} else if (xmlUtil.verificarResponse(inputLine, "enviarPerguntas.xsd")) {
+						enviarPerguntas();
 					}
 				}
 			}
@@ -104,33 +107,67 @@ public class HandleConnectionThread extends Thread {
 		}
 	} // end run
 
+	private void enviarPerguntas() {
+		Document doc = perguntasDoc.getInfo();
+		HashMap<String, HandleConnectionThread> h = mainThread.getAlunos();
+
+
+
+		try {
+			String[] s = is.readLine().split("-");
+			StringBuilder ops = new StringBuilder();
+			for (int i = 1; i < 4; i++) {
+				XPath xpath = XPathFactory.newInstance().newXPath();
+				String opcoes = "//pergunta[texto='"+ s[0] +"']/opcoes/opcao[" + i + "]";
+				String valor = null;
+				try {
+					valor = (String) xpath.evaluate(opcoes, doc, XPathConstants.STRING);
+				} catch (XPathExpressionException e) {
+					e.printStackTrace();
+				}
+				ops.append(valor);
+				ops.append("-"); 
+			}
+			ops.insert(0, s[0] + "-");
+			if (s[1].equalsIgnoreCase("todos")) {
+				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
+					entry.getValue().getOs().println(ops.toString());
+				}
+			} else {
+				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
+					if (entry.getKey().equalsIgnoreCase(s[0])) {
+						entry.getValue().getOs().println(ops.toString());
+					}
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	private void pedidoListarPerguntas() {
+		Document doc = perguntasDoc.getInfo();
 
-		Document doc = alunosdoc.getAlunosDoc();
+		StringBuilder out = new StringBuilder();
 
-		ArrayList<String> tipoCategorias = new ArrayList<String>();
-
-		NodeList perguntas = doc.getElementsByTagName("pergunta");
-
-		int subb = 0;
-
-		for (int i = 0; i < perguntas.getLength(); i++) {
+		NodeList p = doc.getElementsByTagName("pergunta");
+		for (int i = 0; i < p.getLength(); i++) {
 			XPath xpath = XPathFactory.newInstance().newXPath();
-			String expressao = "//pergunta[last()-" + subb + "]/@categoria";
+			String expressao = "/perguntas/pergunta[" + (i + 1) + "]/@categoria";
+			String perguntaTitleexp = "/perguntas/pergunta[" + (i + 1) + "]/texto";
 			String ret = null;
+			String ret1 = null;
 			try {
+				ret1 = (String) xpath.evaluate(perguntaTitleexp, doc, XPathConstants.STRING);
 				ret = (String) xpath.evaluate(expressao, doc, XPathConstants.STRING);
 			} catch (XPathExpressionException e) {
 				e.printStackTrace();
 			}
-			subb++;
-			// System.out.println(ret);
-			if (!tipoCategorias.contains(ret)) {
-				tipoCategorias.add(ret);
-			}
+			out.append(ret1 + "-" + ret + "_");
 		}
-
-		System.out.println(tipoCategorias.toString());
+		os.println(out);
 	}
 
 	private void pedidoLogin() {
@@ -139,7 +176,7 @@ public class HandleConnectionThread extends Thread {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		os.println(s);
@@ -153,8 +190,8 @@ public class HandleConnectionThread extends Thread {
 		if (waitMessage()) {
 			try {
 				String r = is.readLine();
-				if (Login.alunoExiste(alunosdoc.getAlunosDoc(), r)) {
-					mainThread.alunos.put(r,this);
+				if (Login.alunoExiste(alunosdoc.getInfo(), r)) {
+					mainThread.getAlunos().put(r, this);
 					System.out.println("Novo aluno foi adicionado ao servidor");
 				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
@@ -169,9 +206,9 @@ public class HandleConnectionThread extends Thread {
 
 	private void pedidoListarAlunos() {
 
-		Set<String> lista = mainThread.alunos.keySet();
+		Set<String> lista = mainThread.getAlunos().keySet();
 		StringBuilder list = new StringBuilder();
-		for(String s : lista) {
+		for (String s : lista) {
 			list.append(s);
 			list.append("-");
 		}
@@ -184,7 +221,7 @@ public class HandleConnectionThread extends Thread {
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		os.println(s);
@@ -223,13 +260,12 @@ public class HandleConnectionThread extends Thread {
 		try {
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (waitMessage()) {
 			try {
 				String[] second = is.readLine().split("-");
-				if (!Login.alunoExiste(alunosdoc.getAlunosDoc(), second[2])) {
+				if (!Login.alunoExiste(alunosdoc.getInfo(), second[2])) {
 					Register.registarAluno(second[0], second[1], Integer.parseInt(second[2]));
 				} else {
 					os.println("error");
@@ -256,6 +292,14 @@ public class HandleConnectionThread extends Thread {
 			System.out.println("Wait message error");
 			return false;
 		}
+	}
+
+	public BufferedReader getIs() {
+		return is;
+	}
+
+	public PrintWriter getOs() {
+		return os;
 	}
 
 } // end HandleConnectionThread

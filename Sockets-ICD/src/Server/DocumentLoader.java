@@ -18,7 +18,7 @@ public class DocumentLoader {
 			e.printStackTrace();
 		}
 	}
-	public Document getAlunosDoc() {
+	public Document getInfo() {
 		return alunosDoc;
 	}
 }

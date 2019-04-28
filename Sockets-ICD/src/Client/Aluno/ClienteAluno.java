@@ -27,6 +27,15 @@ public class ClienteAluno {
 		}
 	}
 
+	public String ReceiveQuestion() {
+		try {
+			return is.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	public boolean Login(String numero) {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Login>" + "<Log/>"

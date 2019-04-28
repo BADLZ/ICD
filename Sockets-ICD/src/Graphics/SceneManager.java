@@ -50,12 +50,12 @@ public class SceneManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		loginwindow = new LoginWindow(this, c, p);
+		loginwindow = new LoginWindow(this, c);
 		mainscreen = new MainScreen(this);
 		registerwindow = new RegisterWindow(this, c, p);
-		teacherdashboard = new TeacherDashboard(this,c,p);
+		teacherdashboard = new TeacherDashboard(this,p);
 		teacherloginwindow = new TeacherLoginWindow(this);
-		waitingroom = new WaintingRoom(this, c, p);
+		waitingroom = new WaintingRoom(this,c);
 
 		frame = new JFrame();
 		cl = new CardLayout();

@@ -19,8 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import xml.xmlUtil;
-
 public class ClienteProfessor extends Thread {
 
 	final int port = 5025;
@@ -28,8 +26,6 @@ public class ClienteProfessor extends Thread {
 	private Socket s;
 	private BufferedReader is;
 	private PrintWriter os;
-
-	private String ListaAlunos;
 
 	public ClienteProfessor() {
 		this.start();
@@ -84,26 +80,41 @@ public class ClienteProfessor extends Thread {
 	}
 
 	// //pergunta[@id='2']/texto/text()
-	public void getQuestionsFromServer() {
+	public String getQuestionsFromServer() {
 		try {
 			String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Listar>" + "<Perguntas/>"
 					+ "</Listar>";
 
 			os.println(msg);
-			os.println();
 
 			if (!waitMessage()) {
 				System.out.println("Servidor não respondeu a tempo");
-				return;
+				return null;
 			}
 			
 			String inputline = is.readLine();
-			
+			return inputline;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		return null;
 	}
 
+	public void SendQuestions(String question, String student) {
+		String msg = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Questoes>" + "<Enviar/>"
+				+ "</Questoes>";
+
+		os.println(msg);
+		
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		os.println(question+"-"+student);
+	}
 	private String choseQuestion(Document doc, int numb) {
 
 		XPath xpath = XPathFactory.newInstance().newXPath();

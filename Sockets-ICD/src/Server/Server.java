@@ -3,16 +3,15 @@ package Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Server {
+public class Server extends Thread{
 
 	public final static int DEFAULT_PORT = 5025;
 
-	public HashMap<String, HandleConnectionThread> alunos;
+	private HashMap<String, HandleConnectionThread> alunos;
 
-	public Server() {
+	public void run() {
 		int port = DEFAULT_PORT;
 		ServerSocket serverSocket = null;
 		alunos = new HashMap<String, HandleConnectionThread>();
@@ -36,10 +35,6 @@ public class Server {
 		}
 
 	} // end main
-
-	public static void main(String args[]) {
-		new Server();
-	}
 
 	public HashMap<String, HandleConnectionThread> getAlunos() {
 		return alunos;

@@ -116,6 +116,7 @@ public class xmlUtil {
 		try {
 			document = builder.parse(new InputSource(new StringReader(Listar)));
 		} catch (SAXException | IOException e) {
+			System.out.println("File not found");
 			return false;
 		}
 		if (!xmlUtil.Validar(document, "Protocolos\\" + protocoloXSD)) {

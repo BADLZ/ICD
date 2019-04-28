@@ -2,113 +2,79 @@ package Graphics.Scenes;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Client.Aluno.ClienteAluno;
-import Client.Professor.ClienteProfessor;
 import Graphics.SceneManager;
-import Graphics.Aesthetics.FancyButton;
-import Graphics.Aesthetics.FancyTextField;
 
 public class WaintingRoom extends JLabel {
 
 	private static final long serialVersionUID = 1L;
 
 	private SceneManager sm;
-	private ClienteAluno c;
-	private ClienteProfessor p;
+	private ClienteAluno c; 
 	
-	private JLabel error;
-	private JTextField numberfield;
-	private ImageIcon loginBtnimg, loginBtnpressedimg, btnVoltarimg, btnVoltarpressedimg, textfieldimg;
-
-	public WaintingRoom(SceneManager sm, ClienteAluno c, ClienteProfessor p) {
+	private JLabel p,o1,o2,o3;
+	
+	public WaintingRoom(SceneManager sm, ClienteAluno c) {
 		this.sm = sm;
 		this.c = c;
-		this.p = p;
 		initialize();
 	}
 
 	private void initialize() {
-
-		try {
-			loginBtnimg = new ImageIcon(ImageIO.read(new File("src/Images/loginBtn.png")));
-			loginBtnpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/loginBtnpressed.png")));
-			btnVoltarimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtn.png")));
-			btnVoltarpressedimg = new ImageIcon(ImageIO.read(new File("src/Images/voltarBtnpressed.png")));
-			textfieldimg = new ImageIcon(ImageIO.read(new File("src/Images/textfieldimg.png")));
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		setIcon(sm.getBackground());
-		numberfield = new FancyTextField("Enter Your Number", sm.screenWidth / 2 - 95, sm.screenHeight / 2 - 73, 195,
-				30);
-		add(numberfield);
+		
+		
+		
+		JLabel j = new JLabel("Waiting for teacher...", SwingConstants.CENTER);
+		Font f1 = new Font("Consolas", Font.BOLD,40);
+		j.setBounds(0, 30, sm.screenWidth, 200);
+		j.setBackground(Color.gray);
+		j.setOpaque(true);
+		
 
-		error = new JLabel("", SwingConstants.CENTER);
-		Font font = new Font("Consolas", Font.BOLD, 12);
-		error.setFont(font);
-		error.setForeground(Color.red);
-		error.setBounds(sm.screenWidth / 2 - 121, sm.screenHeight / 2 - 12, 270, 30);
-		add(error);
+		Font font = new Font("Consolas", Font.PLAIN,20);
+		Font font1 = new Font("Consolas", Font.BOLD,20);
+		JLabel j1 = new JLabel();
+		j.setBounds(sm.screenWidth / 2 - 200, 30, 400, 200);
+		j.setBackground(Color.gray);
+		j.setOpaque(true);
+		
+		p = new JLabel();
+		p.setBounds(10, 10, 400, 30);
+		p.setFont(font1);
+		
+		o1 = new JLabel();
+		o1.setBounds(10, 40, 400, 30);
+		o1.setFont(font);
 
-		JLabel img1 = new JLabel(textfieldimg);
-		img1.setBounds(sm.screenWidth / 2 - 210, sm.screenHeight / 2 - 135, 420, 150);
-		add(img1);
+		o2 = new JLabel();
+		o2.setBounds(10, 70, 400, 30);
+		o2.setForeground(Color.BLUE);
+		o2.setFont(font);
+		
+		o3 = new JLabel();
+		o3.setBounds(10, 100, 400, 30);
+		o3.setForeground(Color.BLUE);
+		o3.setFont(font);
+	
+		j1.add(p);
+		j1.add(o1);
+		j1.add(o2);
+		j1.add(o3);
 
-		FancyButton btnLogin = new FancyButton("btnLogin", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 17, 200, 67,
-				loginBtnimg, loginBtnpressedimg);
-
-		btnLogin.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				tryLogin();
-			}
-		});
-		btnLogin.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-					tryLogin();
-			}
-		});
-		add(btnLogin);
-
-		FancyButton btnVoltar = new FancyButton("btnVoltar", sm.screenWidth / 2 - 100, sm.screenHeight / 2 + 93, 200,
-				67, btnVoltarimg, btnVoltarpressedimg);
-		btnVoltar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				sm.changeCards("MainScreen");
-			}
-		});
-		add(btnVoltar);
-	}
-
-	private void tryLogin() {
-		String s = numberfield.getText();
-		if(s.charAt(0) == 'p') {
-			sm.changeCards("TeacherLoginWindow");
-		}
-		if (s != null && c.Login(s)) {
-			sm.changeCards("WaitingRoom");
-		} else {
-
-			error.setText("O número que introduziu não é válido");
-			error.setOpaque(true);
+		add(j);
+		add(j1);
+		
+		String rec = c.ReceiveQuestion();
+		if (rec != null) {
+			System.out.println(rec);
 		}
 	}
+
+
 
 }
