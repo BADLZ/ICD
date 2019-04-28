@@ -34,11 +34,12 @@ public class SceneManager {
 	private TeacherLoginWindow teacherloginwindow;
 	private WaintingRoom waitingroom;
 
-
 	private ImageIcon background;
 	private Dimension size = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 	public final int screenWidth = size.width;
 	public final int screenHeight = size.height;
+	
+	private String activeCard = "";
 
 	public SceneManager() {
 		c = new ClienteAluno();
@@ -53,9 +54,9 @@ public class SceneManager {
 		loginwindow = new LoginWindow(this, c);
 		mainscreen = new MainScreen(this);
 		registerwindow = new RegisterWindow(this, c, p);
-		teacherdashboard = new TeacherDashboard(this,p);
+		teacherdashboard = new TeacherDashboard(this, p);
 		teacherloginwindow = new TeacherLoginWindow(this);
-		waitingroom = new WaintingRoom(this,c);
+		waitingroom = new WaintingRoom(this, c);
 
 		frame = new JFrame();
 		cl = new CardLayout();
@@ -76,19 +77,11 @@ public class SceneManager {
 		cards.add(waitingroom, "WaitingRoom");
 	}
 
-	public boolean Login(int numero) {
-		return false;
+	public String getActive() {
+		return activeCard;
 	}
-
-	public boolean createPersonagem(String category) {
-		return false;
-	}
-
-	public boolean setRegisterInfo(String email, String name, char[] password) {
-		return false;
-	}
-
 	public void changeCards(String cardName) {
+		activeCard = cardName;
 		cl.show(cards, cardName);
 	}
 

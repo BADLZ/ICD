@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -111,8 +112,6 @@ public class HandleConnectionThread extends Thread {
 		Document doc = perguntasDoc.getInfo();
 		HashMap<String, HandleConnectionThread> h = mainThread.getAlunos();
 
-
-
 		try {
 			String[] s = is.readLine().split("-");
 			StringBuilder ops = new StringBuilder();
@@ -132,11 +131,14 @@ public class HandleConnectionThread extends Thread {
 			if (s[1].equalsIgnoreCase("todos")) {
 				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
 					entry.getValue().getOs().println(ops.toString());
+					System.out.println("Enviado-> " + ops.toString());
 				}
 			} else {
 				for (Map.Entry<String, HandleConnectionThread> entry : h.entrySet()) {
-					if (entry.getKey().equalsIgnoreCase(s[0])) {
+					if (entry.getKey().equalsIgnoreCase(s[1])) {
 						entry.getValue().getOs().println(ops.toString());
+						System.out.println("Enviado-> " + ops.toString());
+						
 					}
 				}
 			}
@@ -192,6 +194,8 @@ public class HandleConnectionThread extends Thread {
 				String r = is.readLine();
 				if (Login.alunoExiste(alunosdoc.getInfo(), r)) {
 					mainThread.getAlunos().put(r, this);
+					os.println("<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Enter/>"
+							+ "</Permissao>");
 					System.out.println("Novo aluno foi adicionado ao servidor");
 				} else {
 					s = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>" + "<Permissao>" + "<Error/>"
